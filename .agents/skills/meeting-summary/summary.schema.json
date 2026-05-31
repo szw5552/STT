@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Meeting summary artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "meeting",
+    "hero",
+    "agenda",
+    "attendees",
+    "highlights",
+    "decisions",
+    "actionItems",
+    "quotes",
+    "closingNote"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "meeting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "language", "generatedAt", "sourceLanguages"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "location": { "type": "string" },
+        "language": { "const": "zh-TW" },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "sourceLanguages": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "hero": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kicker", "headline", "dek"],
+      "properties": {
+        "kicker": { "type": "string" },
+        "headline": { "type": "string" },
+        "dek": { "type": "string" }
+      }
+    },
+    "agenda": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "attendees": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "highlights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "body"],
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "actionItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["owner", "task"],
+        "properties": {
+          "owner": { "type": "string" },
+          "task": { "type": "string" },
+          "due": { "type": "string" }
+        }
+      }
+    },
+    "quotes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "closingNote": {
+      "type": "string"
+    }
+  }
+}

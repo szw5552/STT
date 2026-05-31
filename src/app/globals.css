@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: oklch(1 0 0);
+  --color-surface: oklch(0.975 0.008 130);
+  --color-surface-strong: oklch(0.94 0.018 130);
+  --color-ink: oklch(0.24 0.022 130);
+  --color-muted: oklch(0.46 0.016 130);
+  --color-line: oklch(0.88 0.012 130);
+  --color-primary: oklch(0.55 0.142 130);
+  --color-primary-soft: oklch(0.93 0.042 130);
+  --color-accent: oklch(0.47 0.103 36);
+  --color-accent-soft: oklch(0.94 0.028 36);
+  --shadow-soft: 0 18px 48px oklch(0.24 0.022 130 / 0.08);
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-ink);
+  --font-sans: var(--font-noto-sans-tc);
+  --font-serif: var(--font-noto-serif-tc);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, oklch(0.94 0.05 130 / 0.55), transparent 34%),
+    radial-gradient(circle at right 18%, oklch(0.95 0.03 36 / 0.45), transparent 24%),
+    var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-noto-sans-tc), sans-serif;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+a,
+button {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: oklch(0.88 0.08 130);
+  color: var(--color-ink);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
