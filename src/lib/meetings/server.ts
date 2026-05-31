@@ -21,6 +21,8 @@ const UPLOAD_ROOT = path.join(ROOT_DIR, "upload");
 const ARTIFACT_ROOT = path.join(ROOT_DIR, "artifacts");
 const COMPLETED_ROOT = path.join(ROOT_DIR, "completed");
 const PUBLISHED_ROOT = path.join(ROOT_DIR, "published");
+const IS_READ_ONLY_DEPLOYMENT =
+  process.env.VERCEL === "1" || ROOT_DIR.startsWith("/var/task");
 
 const AUDIO_EXTENSIONS = new Set([
   ".flac",
@@ -124,13 +126,20 @@ function buildPhotoUrl(meetingId: string, fileName: string) {
 }
 
 async function ensureDataRoots() {
+  if (IS_READ_ONLY_DEPLOYMENT) {
+    return;
+  }
+
   const ensureDirectory = async (directoryPath: string) => {
     try {
       await fs.mkdir(directoryPath, { recursive: true });
     } catch (error) {
       if (
         isNodeError(error) &&
-        (error.code === "EROFS" || error.code === "EACCES" || error.code === "EPERM")
+        (error.code === "EROFS" ||
+          error.code === "EACCES" ||
+          error.code === "EPERM" ||
+          error.code === "ENOENT")
       ) {
         return;
       }
