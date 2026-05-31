@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
+import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
+import { promisify } from "node:util";
 import sharp from "sharp";
 import {
   buildPhotoOutputFileName,
@@ -19,6 +22,7 @@ import {
 } from "./lib/meeting-paths.mjs";
 
 const requestedMeetingIds = process.argv.slice(2);
+const execFileAsync = promisify(execFile);
 
 async function buildSourcePhotoFiles(meetingId) {
   const directories = getMeetingDirectories(meetingId);
@@ -61,6 +65,29 @@ async function hasCurrentOptimizedPhotos(directories, sourceFiles) {
   return derivedFilesExist.every(Boolean);
 }
 
+async function writeWebp(sourcePath, outputPath) {
+  return sharp(sourcePath).rotate().webp({ quality: 82 }).toFile(outputPath);
+}
+
+async function writeWebpFromHeicViaSips(sourcePath, outputPath) {
+  const tempDir = await fs.mkdtemp(path.join(tmpdir(), "stt-heic-"));
+  const tempPngPath = path.join(tempDir, `${path.parse(sourcePath).name}.png`);
+
+  try {
+    await execFileAsync("sips", ["-s", "format", "png", sourcePath, "--out", tempPngPath]);
+    return await writeWebp(tempPngPath, outputPath);
+  } catch (error) {
+    const stderr =
+      error !== null && typeof error === "object" && "stderr" in error && typeof error.stderr === "string"
+        ? error.stderr.trim()
+        : "";
+    const reason = stderr || (error instanceof Error ? error.message : String(error));
+    throw new Error(`HEIC 備援轉檔失敗：${reason}`);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
 async function optimizeMeetingPhotos(meetingId) {
   const directories = getMeetingDirectories(meetingId);
   const { sourceFiles, sourceLocation } = await buildSourcePhotoFiles(meetingId);
@@ -85,7 +112,17 @@ async function optimizeMeetingPhotos(meetingId) {
     const outputPath = path.join(directories.artifactPhotoDir, outputFileName);
 
     try {
-      const result = await sharp(sourceFile.filePath).rotate().webp({ quality: 82 }).toFile(outputPath);
+      let result;
+
+      try {
+        result = await writeWebp(sourceFile.filePath, outputPath);
+      } catch (error) {
+        if (path.extname(sourceFile.filePath).toLowerCase() !== ".heic") {
+          throw error;
+        }
+
+        result = await writeWebpFromHeicViaSips(sourceFile.filePath, outputPath);
+      }
 
       if (typeof result.width !== "number" || typeof result.height !== "number") {
         throw new Error("轉檔完成，但未取得輸出尺寸。");

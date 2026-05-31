@@ -20,6 +20,7 @@ const ROOT_DIR = process.cwd();
 const UPLOAD_ROOT = path.join(ROOT_DIR, "upload");
 const ARTIFACT_ROOT = path.join(ROOT_DIR, "artifacts");
 const COMPLETED_ROOT = path.join(ROOT_DIR, "completed");
+const PUBLISHED_ROOT = path.join(ROOT_DIR, "published");
 
 const AUDIO_EXTENSIONS = new Set([
   ".flac",
@@ -56,6 +57,19 @@ type ResolvedMeetingRoot = {
 
 function isNodeError(error: unknown): error is NodeJS.ErrnoException {
   return error !== null && typeof error === "object" && "code" in error;
+}
+
+function getPublishedPaths(meetingId: string) {
+  const safeMeetingId = normalizeSegment(meetingId, "meetingId");
+  const publishedDir = path.join(PUBLISHED_ROOT, safeMeetingId);
+
+  return {
+    publishedDir,
+    publishedPhotoDir: path.join(publishedDir, "photos"),
+    photoManifestPath: path.join(publishedDir, "photo-manifest.json"),
+    transcriptPath: path.join(publishedDir, "transcript.json"),
+    summaryPath: path.join(publishedDir, "summary.json"),
+  };
 }
 
 function normalizeSegment(value: string, label: string) {
@@ -110,10 +124,26 @@ function buildPhotoUrl(meetingId: string, fileName: string) {
 }
 
 async function ensureDataRoots() {
+  const ensureDirectory = async (directoryPath: string) => {
+    try {
+      await fs.mkdir(directoryPath, { recursive: true });
+    } catch (error) {
+      if (
+        isNodeError(error) &&
+        (error.code === "EROFS" || error.code === "EACCES" || error.code === "EPERM")
+      ) {
+        return;
+      }
+
+      throw error;
+    }
+  };
+
   await Promise.all([
-    fs.mkdir(UPLOAD_ROOT, { recursive: true }),
-    fs.mkdir(ARTIFACT_ROOT, { recursive: true }),
-    fs.mkdir(COMPLETED_ROOT, { recursive: true }),
+    ensureDirectory(UPLOAD_ROOT),
+    ensureDirectory(ARTIFACT_ROOT),
+    ensureDirectory(COMPLETED_ROOT),
+    ensureDirectory(PUBLISHED_ROOT),
   ]);
 }
 
@@ -205,6 +235,22 @@ async function resolveMeetingRoot(meetingId: string): Promise<ResolvedMeetingRoo
     };
   }
 
+  const publishedPaths = getPublishedPaths(safeMeetingId);
+
+  if (await fileExists(publishedPaths.publishedDir)) {
+    return {
+      sourceLocation: "published",
+      meetingDir: publishedPaths.publishedDir,
+      audioDir: path.join(publishedPaths.publishedDir, "audio"),
+      sourcePhotoDir: path.join(publishedPaths.publishedDir, "__source_photos__"),
+      artifactDir: publishedPaths.publishedDir,
+      artifactPhotoDir: publishedPaths.publishedPhotoDir,
+      photoManifestPath: publishedPaths.photoManifestPath,
+      transcriptPath: publishedPaths.transcriptPath,
+      summaryPath: publishedPaths.summaryPath,
+    };
+  }
+
   throw new Error(`找不到會議資料夾: ${safeMeetingId}`);
 }
 
@@ -218,6 +264,18 @@ async function hasUsableOptimizedPhotos(
   manifest: PhotoManifestArtifact | null,
 ) {
   if (sourcePhotos.length === 0) {
+    if (root.sourceLocation === "published") {
+      if (!manifest) {
+        return false;
+      }
+
+      const derivedFilesExist = await Promise.all(
+        manifest.photos.map((photo) => fileExists(path.join(root.artifactPhotoDir, photo.outputFileName))),
+      );
+
+      return derivedFilesExist.every(Boolean);
+    }
+
     return true;
   }
 
@@ -278,6 +336,10 @@ function toMeetingStatus(
   hasOptimizedPhotos: boolean,
   photoCount: number,
 ): MeetingStatus {
+  if (sourceLocation === "published") {
+    return "archived";
+  }
+
   if (!hasTranscript) {
     return "needs-transcription";
   }
@@ -298,7 +360,8 @@ export async function listMeetings(): Promise<MeetingListItem[]> {
 
   const uploadMeetingIds = await listMeetingIdsFromRoot(UPLOAD_ROOT);
   const completedMeetingIds = await listMeetingIdsFromRoot(COMPLETED_ROOT);
-  const meetingIds = [...new Set([...uploadMeetingIds, ...completedMeetingIds])];
+  const publishedMeetingIds = await listMeetingIdsFromRoot(PUBLISHED_ROOT);
+  const meetingIds = [...new Set([...uploadMeetingIds, ...completedMeetingIds, ...publishedMeetingIds])];
 
   const meetings = await Promise.all(
     meetingIds.map(async (meetingId) => {
@@ -474,12 +537,26 @@ export async function archiveMeetingRawInput(meetingId: string) {
 
 export async function readMeetingSummary(meetingId: string): Promise<MeetingSummary | null> {
   const { summaryPath } = getArtifactPaths(meetingId);
-  return readJsonFile(summaryPath, isMeetingSummary);
+  const summary = await readJsonFile(summaryPath, isMeetingSummary);
+
+  if (summary) {
+    return summary;
+  }
+
+  const publishedPaths = getPublishedPaths(meetingId);
+  return readJsonFile(publishedPaths.summaryPath, isMeetingSummary);
 }
 
 export async function readTranscriptArtifact(
   meetingId: string,
 ): Promise<TranscriptArtifact | null> {
   const { transcriptPath } = getArtifactPaths(meetingId);
-  return readJsonFile(transcriptPath, isTranscriptArtifact);
+  const transcript = await readJsonFile(transcriptPath, isTranscriptArtifact);
+
+  if (transcript) {
+    return transcript;
+  }
+
+  const publishedPaths = getPublishedPaths(meetingId);
+  return readJsonFile(publishedPaths.transcriptPath, isTranscriptArtifact);
 }

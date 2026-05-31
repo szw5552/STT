@@ -35,8 +35,8 @@ export default async function Home() {
             把一次會議，收成一頁好翻的紀錄。
           </h1>
           <p className="max-w-[62ch] text-lg leading-8 text-[color:var(--color-muted)]">
-            這個工作台會讀取 `upload/`、`artifacts/` 與 `completed/`
-            的實際檔案狀態。現在可以直接用 `meeting-pipeline` skill
+            這個工作台會讀取本機 `upload/`、`artifacts/`、`completed/` 的實際檔案狀態，
+            也能讀取可部署的 `published/` 會議 bundle。現在可以直接用 `meeting-pipeline` skill
             接手整條流程，從 Groq 轉錄、zh-TW 摘要、照片轉成 webp 到歸檔都沿著同一個入口往下跑。
           </p>
           <div className="flex flex-wrap gap-3">
@@ -220,7 +220,13 @@ export default async function Home() {
                     <div className="flex flex-wrap gap-4 text-sm text-[color:var(--color-muted)]">
                       <span>{meeting.audioCount} 段錄音</span>
                       <span>{meeting.photoCount} 張照片</span>
-                      <span>{meeting.sourceLocation === "upload" ? "仍在 upload" : "已移到 completed"}</span>
+                      <span>
+                        {meeting.sourceLocation === "upload"
+                          ? "仍在 upload"
+                          : meeting.sourceLocation === "published"
+                            ? "已發佈到 published"
+                            : "已移到 completed"}
+                      </span>
                     </div>
                   </div>
                   <Link

@@ -10,7 +10,8 @@
     "status": "node scripts/meeting-status.mjs",
     "transcribe": "node scripts/transcribe-meeting.mjs",
     "archive": "node scripts/archive-meeting.mjs",
-    "optimize-photos": "node scripts/optimize-meeting-photos.mjs"
+    "optimize-photos": "node scripts/optimize-meeting-photos.mjs",
+    "publish-meeting": "node scripts/publish-meeting.mjs"
   },
   "dependencies": {
     "@next/env": "^16.2.6",

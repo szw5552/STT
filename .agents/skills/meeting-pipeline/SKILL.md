@@ -29,10 +29,20 @@ the summary step by itself.
      one to process before continuing.
 2. Run `npm run status -- <meeting-id>` and inspect `nextAction`.
 3. If `nextAction` is `transcribe`, run `npm run transcribe -- <meeting-id>`.
+   - Treat every audio file under `upload/<meeting-id>/audio/` as part of the same
+     meeting transcript.
+   - Process those source audio files in filename order.
+   - If any single source audio file is larger than Groq's 25 MB upload limit,
+     split it into ordered segments first, then upload those segments in order.
+   - Preserve the transcript as one `artifacts/<meeting-id>/transcript.json`
+     artifact for the whole meeting, with metadata that keeps both source-file
+     order and any segment order explicit.
 4. Run `npm run status -- <meeting-id>` again.
 5. If `nextAction` is `summarize`:
    - read `artifacts/<meeting-id>/transcript.json`,
    - read `.agents/skills/meeting-summary/summary.schema.json`,
+   - treat the transcript as the combined content of all source audio files and
+     segments in order,
    - write a valid zh-TW `artifacts/<meeting-id>/summary.json`.
 6. Run `npm run status -- <meeting-id>` again.
 7. If `nextAction` is `optimize-photos`, run `npm run optimize-photos -- <meeting-id>`.
@@ -49,6 +59,8 @@ the summary step by itself.
 - Respect the JSON schema exactly. No Markdown fences or comments.
 - If the transcript already matches the current audio hashes, keep the cached
   transcript instead of forcing a rewrite.
+- Do not create one summary per audio file or per split segment; the meeting
+  always ends with one combined transcript and one combined summary.
 - Convert every photo found under `upload/<meeting-id>/photos` into a cached webp derivative before archiving.
 - Only archive after `summary.json` and the webp derivatives exist.
 

@@ -6,6 +6,7 @@ export const ROOT_DIR = process.cwd();
 export const UPLOAD_ROOT = path.join(ROOT_DIR, "upload");
 export const ARTIFACT_ROOT = path.join(ROOT_DIR, "artifacts");
 export const COMPLETED_ROOT = path.join(ROOT_DIR, "completed");
+export const PUBLISHED_ROOT = path.join(ROOT_DIR, "published");
 
 const AUDIO_EXTENSIONS = new Set([
   ".flac",
@@ -49,6 +50,7 @@ export async function ensurePipelineDirectories() {
     fs.mkdir(UPLOAD_ROOT, { recursive: true }),
     fs.mkdir(ARTIFACT_ROOT, { recursive: true }),
     fs.mkdir(COMPLETED_ROOT, { recursive: true }),
+    fs.mkdir(PUBLISHED_ROOT, { recursive: true }),
   ]);
 }
 
@@ -82,6 +84,11 @@ export function getMeetingDirectories(meetingId) {
     completedDir: path.join(COMPLETED_ROOT, safeMeetingId),
     completedAudioDir: path.join(COMPLETED_ROOT, safeMeetingId, "audio"),
     completedPhotoDir: path.join(COMPLETED_ROOT, safeMeetingId, "photos"),
+    publishedDir: path.join(PUBLISHED_ROOT, safeMeetingId),
+    publishedPhotoDir: path.join(PUBLISHED_ROOT, safeMeetingId, "photos"),
+    publishedPhotoManifestPath: path.join(PUBLISHED_ROOT, safeMeetingId, "photo-manifest.json"),
+    publishedTranscriptPath: path.join(PUBLISHED_ROOT, safeMeetingId, "transcript.json"),
+    publishedSummaryPath: path.join(PUBLISHED_ROOT, safeMeetingId, "summary.json"),
   };
 }
 

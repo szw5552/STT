@@ -5,11 +5,20 @@ export type MeetingStatus =
   | "ready-to-archive"
   | "archived";
 
-export type MeetingLocation = "upload" | "completed";
+export type MeetingLocation = "upload" | "completed" | "published";
 
 export type TranscriptChunk = {
   fileName: string;
+  fileIndex?: number;
+  segmentCount?: number;
   text: string;
+};
+
+export type TranscriptUploadSegment = {
+  segmentIndex: number;
+  fileName: string;
+  sizeBytes: number;
+  sha256: string;
 };
 
 export type TranscriptSourceFile = {
@@ -18,6 +27,9 @@ export type TranscriptSourceFile = {
   mimeType: string;
   sizeBytes: number;
   sha256: string;
+  fileIndex?: number;
+  uploadStrategy?: "single" | "split";
+  uploadSegments?: TranscriptUploadSegment[];
 };
 
 export type TranscriptArtifact = {
@@ -85,7 +97,7 @@ export type PhotoManifestArtifact = {
   schemaVersion: 1;
   meetingId: string;
   createdAt: string;
-  sourceLocation: "upload" | "completed";
+  sourceLocation: "upload" | "completed" | "published";
   sourceFiles: PhotoManifestSourceFile[];
   photos: PhotoManifestEntry[];
 };
@@ -137,6 +149,43 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
 }
 
+function isTranscriptUploadSegment(value: unknown): value is TranscriptUploadSegment {
+  return (
+    isRecord(value) &&
+    typeof value.segmentIndex === "number" &&
+    typeof value.fileName === "string" &&
+    typeof value.sizeBytes === "number" &&
+    typeof value.sha256 === "string"
+  );
+}
+
+function isTranscriptSourceFile(value: unknown): value is TranscriptSourceFile {
+  return (
+    isRecord(value) &&
+    typeof value.fileName === "string" &&
+    typeof value.filePath === "string" &&
+    typeof value.mimeType === "string" &&
+    typeof value.sizeBytes === "number" &&
+    typeof value.sha256 === "string" &&
+    (value.fileIndex === undefined || typeof value.fileIndex === "number") &&
+    (value.uploadStrategy === undefined ||
+      value.uploadStrategy === "single" ||
+      value.uploadStrategy === "split") &&
+    (value.uploadSegments === undefined ||
+      (Array.isArray(value.uploadSegments) && value.uploadSegments.every(isTranscriptUploadSegment)))
+  );
+}
+
+function isTranscriptChunk(value: unknown): value is TranscriptChunk {
+  return (
+    isRecord(value) &&
+    typeof value.fileName === "string" &&
+    typeof value.text === "string" &&
+    (value.fileIndex === undefined || typeof value.fileIndex === "number") &&
+    (value.segmentCount === undefined || typeof value.segmentCount === "number")
+  );
+}
+
 export function isTranscriptArtifact(value: unknown): value is TranscriptArtifact {
   if (!isRecord(value)) {
     return false;
@@ -149,7 +198,9 @@ export function isTranscriptArtifact(value: unknown): value is TranscriptArtifac
     typeof value.model === "string" &&
     typeof value.text === "string" &&
     Array.isArray(value.sourceFiles) &&
-    Array.isArray(value.chunks)
+    value.sourceFiles.every(isTranscriptSourceFile) &&
+    Array.isArray(value.chunks) &&
+    value.chunks.every(isTranscriptChunk)
   );
 }
 
@@ -205,7 +256,9 @@ export function isPhotoManifestArtifact(value: unknown): value is PhotoManifestA
     value.schemaVersion === 1 &&
     typeof value.meetingId === "string" &&
     typeof value.createdAt === "string" &&
-    (value.sourceLocation === "upload" || value.sourceLocation === "completed") &&
+    (value.sourceLocation === "upload" ||
+      value.sourceLocation === "completed" ||
+      value.sourceLocation === "published") &&
     Array.isArray(value.sourceFiles) &&
     value.sourceFiles.every(
       (item) =>

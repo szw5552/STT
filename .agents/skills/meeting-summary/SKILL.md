@@ -14,9 +14,14 @@ Read one `artifacts/<meeting-id>/transcript.json` file, then write a matching
 ## Required workflow
 
 1. Read `artifacts/<meeting-id>/transcript.json`.
+   - The transcript may come from multiple source audio files.
+   - Those source files are ordered by filename.
+   - A single source file may itself have been split into multiple ordered upload
+     segments before transcription because of Groq's 25 MB limit.
 2. Read `.agents/skills/meeting-summary/summary.schema.json`.
 3. Infer the meeting's main topic, attendees, agenda, highlights, decisions,
-   action items, and memorable quotes from the transcript.
+   action items, and memorable quotes from the full combined transcript text
+   across all files and segments.
 4. Write valid JSON to `artifacts/<meeting-id>/summary.json`.
 
 ## Output rules

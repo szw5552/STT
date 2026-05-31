@@ -16,6 +16,7 @@ import {
   sha256File,
   sourceFilesMatchManifest,
 } from "./lib/meeting-paths.mjs";
+import { publishMeetingBundle } from "./lib/publish-meeting-bundle.mjs";
 
 const { loadEnvConfig } = nextEnv;
 
@@ -78,6 +79,7 @@ async function archiveMeeting(meetingId) {
   await ensurePhotoDerivativesReady(meetingId, directories);
   await fs.mkdir(COMPLETED_ROOT, { recursive: true });
   await fs.rename(directories.uploadDir, directories.completedDir);
+  await publishMeetingBundle(meetingId);
   console.log(`- ${meetingId}: 已移到 completed/${meetingId}`);
 }
 

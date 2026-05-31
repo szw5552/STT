@@ -6,7 +6,9 @@ export async function GET(
   _request: Request,
   context: RouteContext<"/api/meetings/[meetingId]/photos/[photoName]">,
 ) {
-  const { meetingId, photoName } = await context.params;
+  const { meetingId: rawMeetingId, photoName: rawPhotoName } = await context.params;
+  const meetingId = decodeURIComponent(rawMeetingId);
+  const photoName = decodeURIComponent(rawPhotoName);
   const photo = await getMeetingPhoto(meetingId, photoName);
 
   return new Response(new Uint8Array(photo.body), {

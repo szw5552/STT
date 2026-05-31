@@ -8,6 +8,10 @@ import { getMeetingDetail } from "@/lib/meetings/server";
 
 export const dynamic = "force-dynamic";
 
+function decodeRouteParam(value: string) {
+  return decodeURIComponent(value);
+}
+
 function formatDateLabel(value?: string) {
   if (!value) {
     return "未提供";
@@ -23,12 +27,21 @@ function formatDateLabel(value?: string) {
   }
 }
 
+function formatSourceLocationLabel(sourceLocation: "upload" | "completed" | "published") {
+  return sourceLocation === "upload"
+    ? "upload/"
+    : sourceLocation === "published"
+      ? "published/"
+      : "completed/";
+}
+
 export async function generateMetadata(
   props: {
     params: Promise<{ meetingId: string }>;
   },
 ): Promise<Metadata> {
-  const { meetingId } = await props.params;
+  const { meetingId: rawMeetingId } = await props.params;
+  const meetingId = decodeRouteParam(rawMeetingId);
 
   try {
     const meeting = await getMeetingDetail(meetingId);
@@ -49,7 +62,8 @@ export async function generateMetadata(
 export default async function MeetingPage(props: {
   params: Promise<{ meetingId: string }>;
 }) {
-  const { meetingId } = await props.params;
+  const { meetingId: rawMeetingId } = await props.params;
+  const meetingId = decodeRouteParam(rawMeetingId);
 
   let meeting;
 
@@ -102,7 +116,7 @@ export default async function MeetingPage(props: {
             </div>
             <div className="border-t border-[color:var(--color-line)] pt-3">
               <p className="font-semibold text-[color:var(--color-ink)]">素材位置</p>
-              <p className="mt-2">{meeting.sourceLocation === "upload" ? "upload/" : "completed/"}</p>
+              <p className="mt-2">{formatSourceLocationLabel(meeting.sourceLocation)}</p>
             </div>
           </div>
         </div>
@@ -354,43 +368,6 @@ export default async function MeetingPage(props: {
                   尚未在摘要內標出參與者。
                 </p>
               )}
-            </div>
-          </section>
-
-          <section className="rounded-[1.6rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-6">
-            <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-accent)]">
-              檔案位置
-            </p>
-            <dl className="mt-4 space-y-4 text-sm leading-7 text-[color:var(--color-muted)]">
-              <div>
-                <dt className="font-semibold text-[color:var(--color-ink)]">錄音與原始照片</dt>
-                <dd>{meeting.sourceLocation === "upload" ? "upload/" : "completed/"}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-[color:var(--color-ink)]">逐字稿</dt>
-                <dd>{meeting.transcriptPath}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-[color:var(--color-ink)]">摘要</dt>
-                <dd>{meeting.summaryPath}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-[color:var(--color-ink)]">webp 照片</dt>
-                <dd>{`artifacts/${meeting.id}/photos`}</dd>
-              </div>
-            </dl>
-          </section>
-
-          <section className="rounded-[1.6rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] p-6">
-            <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-primary)]">
-              建議操作
-            </p>
-            <div className="mt-4 space-y-3 text-sm leading-7 text-[color:var(--color-muted)]">
-              <p>用 `meeting-pipeline` skill 處理 `{meeting.id}`</p>
-              <p>{meeting.recommendedCommands.status}</p>
-              <p>{meeting.recommendedCommands.transcribe}</p>
-              <p>{meeting.recommendedCommands.optimizePhotos}</p>
-              <p>{meeting.recommendedCommands.archive}</p>
             </div>
           </section>
 

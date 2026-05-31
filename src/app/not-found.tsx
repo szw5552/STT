@@ -10,7 +10,8 @@ export default function NotFound() {
         這一頁還沒有可讀的素材。
       </h1>
       <p className="max-w-[62ch] text-base leading-8 text-[color:var(--color-muted)]">
-        請先確認 meeting id、`artifacts/&lt;meeting-id&gt;/summary.json` 是否存在，
+        請先確認 meeting id、`published/&lt;meeting-id&gt;/summary.json` 或
+        `artifacts/&lt;meeting-id&gt;/summary.json` 是否存在，
         或回到首頁查看目前有哪些會議已經整理完成。
       </p>
       <div>
