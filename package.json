@@ -9,7 +9,8 @@
     "lint": "eslint",
     "status": "node scripts/meeting-status.mjs",
     "transcribe": "node scripts/transcribe-meeting.mjs",
-    "archive": "node scripts/archive-meeting.mjs"
+    "archive": "node scripts/archive-meeting.mjs",
+    "optimize-photos": "node scripts/optimize-meeting-photos.mjs"
   },
   "dependencies": {
     "@next/env": "^16.2.6",
@@ -17,7 +18,8 @@
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

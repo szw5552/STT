@@ -6,10 +6,13 @@ import {
   type MeetingDetail,
   type MeetingListItem,
   type MeetingLocation,
+  type MeetingPhoto,
   type MeetingStatus,
   type MeetingSummary,
+  type PhotoManifestArtifact,
   type TranscriptArtifact,
   isMeetingSummary,
+  isPhotoManifestArtifact,
   isTranscriptArtifact,
 } from "@/lib/meetings/schema";
 
@@ -43,7 +46,12 @@ type ResolvedMeetingRoot = {
   sourceLocation: MeetingLocation;
   meetingDir: string;
   audioDir: string;
-  photoDir: string;
+  sourcePhotoDir: string;
+  artifactDir: string;
+  artifactPhotoDir: string;
+  photoManifestPath: string;
+  transcriptPath: string;
+  summaryPath: string;
 };
 
 function isNodeError(error: unknown): error is NodeJS.ErrnoException {
@@ -68,6 +76,37 @@ function humanizeMeetingId(meetingId: string) {
   return meetingId
     .replace(/[-_.]+/g, " ")
     .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function getArtifactPaths(meetingId: string) {
+  const safeMeetingId = normalizeSegment(meetingId, "meetingId");
+  const artifactDir = path.join(ARTIFACT_ROOT, safeMeetingId);
+
+  return {
+    artifactDir,
+    artifactPhotoDir: path.join(artifactDir, "photos"),
+    photoManifestPath: path.join(artifactDir, "photo-manifest.json"),
+    transcriptPath: path.join(artifactDir, "transcript.json"),
+    summaryPath: path.join(artifactDir, "summary.json"),
+  };
+}
+
+function guessImageContentType(fileName: string) {
+  const extension = path.extname(fileName).toLowerCase();
+
+  return extension === ".avif"
+    ? "image/avif"
+    : extension === ".heic"
+      ? "image/heic"
+      : extension === ".png"
+        ? "image/png"
+        : extension === ".webp"
+          ? "image/webp"
+          : "image/jpeg";
+}
+
+function buildPhotoUrl(meetingId: string, fileName: string) {
+  return `/api/meetings/${encodeURIComponent(meetingId)}/photos/${encodeURIComponent(fileName)}`;
 }
 
 async function ensureDataRoots() {
@@ -122,44 +161,6 @@ async function listFilesByExtension(directoryPath: string, extensions: Set<strin
     .sort((left, right) => left.localeCompare(right));
 }
 
-function getArtifactPaths(meetingId: string) {
-  const safeMeetingId = normalizeSegment(meetingId, "meetingId");
-  const artifactDir = path.join(ARTIFACT_ROOT, safeMeetingId);
-
-  return {
-    artifactDir,
-    transcriptPath: path.join(artifactDir, "transcript.json"),
-    summaryPath: path.join(artifactDir, "summary.json"),
-  };
-}
-
-async function resolveMeetingRoot(meetingId: string): Promise<ResolvedMeetingRoot> {
-  const safeMeetingId = normalizeSegment(meetingId, "meetingId");
-  const uploadDir = path.join(UPLOAD_ROOT, safeMeetingId);
-
-  if (await fileExists(uploadDir)) {
-    return {
-      sourceLocation: "upload",
-      meetingDir: uploadDir,
-      audioDir: path.join(uploadDir, "audio"),
-      photoDir: path.join(uploadDir, "photos"),
-    };
-  }
-
-  const completedDir = path.join(COMPLETED_ROOT, safeMeetingId);
-
-  if (await fileExists(completedDir)) {
-    return {
-      sourceLocation: "completed",
-      meetingDir: completedDir,
-      audioDir: path.join(completedDir, "audio"),
-      photoDir: path.join(completedDir, "photos"),
-    };
-  }
-
-  throw new Error(`找不到會議資料夾: ${safeMeetingId}`);
-}
-
 async function readJsonFile<T>(
   filePath: string,
   validator: (value: unknown) => value is T,
@@ -177,10 +178,105 @@ async function readJsonFile<T>(
   }
 }
 
+async function resolveMeetingRoot(meetingId: string): Promise<ResolvedMeetingRoot> {
+  const safeMeetingId = normalizeSegment(meetingId, "meetingId");
+  const artifactPaths = getArtifactPaths(safeMeetingId);
+  const uploadDir = path.join(UPLOAD_ROOT, safeMeetingId);
+
+  if (await fileExists(uploadDir)) {
+    return {
+      sourceLocation: "upload",
+      meetingDir: uploadDir,
+      audioDir: path.join(uploadDir, "audio"),
+      sourcePhotoDir: path.join(uploadDir, "photos"),
+      ...artifactPaths,
+    };
+  }
+
+  const completedDir = path.join(COMPLETED_ROOT, safeMeetingId);
+
+  if (await fileExists(completedDir)) {
+    return {
+      sourceLocation: "completed",
+      meetingDir: completedDir,
+      audioDir: path.join(completedDir, "audio"),
+      sourcePhotoDir: path.join(completedDir, "photos"),
+      ...artifactPaths,
+    };
+  }
+
+  throw new Error(`找不到會議資料夾: ${safeMeetingId}`);
+}
+
+async function readPhotoManifest(root: ResolvedMeetingRoot): Promise<PhotoManifestArtifact | null> {
+  return readJsonFile(root.photoManifestPath, isPhotoManifestArtifact);
+}
+
+async function hasUsableOptimizedPhotos(
+  root: ResolvedMeetingRoot,
+  sourcePhotos: string[],
+  manifest: PhotoManifestArtifact | null,
+) {
+  if (sourcePhotos.length === 0) {
+    return true;
+  }
+
+  if (
+    !manifest ||
+    manifest.photos.length !== sourcePhotos.length ||
+    manifest.sourceFiles.length !== sourcePhotos.length
+  ) {
+    return false;
+  }
+
+  const manifestMatchesCurrentFiles = manifest.sourceFiles.every(
+    (sourceFile, index) => sourceFile.fileName === sourcePhotos[index],
+  );
+
+  if (!manifestMatchesCurrentFiles) {
+    return false;
+  }
+
+  const derivedFilesExist = await Promise.all(
+    manifest.photos.map((photo) => fileExists(path.join(root.artifactPhotoDir, photo.outputFileName))),
+  );
+
+  return derivedFilesExist.every(Boolean);
+}
+
+async function buildRenderablePhotos(
+  root: ResolvedMeetingRoot,
+  meetingId: string,
+  sourcePhotos: string[],
+): Promise<{ hasOptimizedPhotos: boolean; photos: MeetingPhoto[] }> {
+  const manifest = await readPhotoManifest(root);
+  const hasOptimizedPhotos = await hasUsableOptimizedPhotos(root, sourcePhotos, manifest);
+
+  if (hasOptimizedPhotos && manifest) {
+    return {
+      hasOptimizedPhotos: true,
+      photos: manifest.photos.map((photo) => ({
+        fileName: photo.sourceFileName,
+        url: buildPhotoUrl(meetingId, photo.outputFileName),
+      })),
+    };
+  }
+
+  return {
+    hasOptimizedPhotos: sourcePhotos.length === 0,
+    photos: sourcePhotos.map((fileName) => ({
+      fileName,
+      url: buildPhotoUrl(meetingId, fileName),
+    })),
+  };
+}
+
 function toMeetingStatus(
   sourceLocation: MeetingLocation,
   hasTranscript: boolean,
   hasSummary: boolean,
+  hasOptimizedPhotos: boolean,
+  photoCount: number,
 ): MeetingStatus {
   if (!hasTranscript) {
     return "needs-transcription";
@@ -188,6 +284,10 @@ function toMeetingStatus(
 
   if (!hasSummary) {
     return "needs-summary";
+  }
+
+  if (sourceLocation === "upload" && photoCount > 0 && !hasOptimizedPhotos) {
+    return "needs-photo-optimization";
   }
 
   return sourceLocation === "upload" ? "ready-to-archive" : "archived";
@@ -204,14 +304,20 @@ export async function listMeetings(): Promise<MeetingListItem[]> {
     meetingIds.map(async (meetingId) => {
       const root = await resolveMeetingRoot(meetingId);
       const audioFiles = await listFilesByExtension(root.audioDir, AUDIO_EXTENSIONS);
-      const photoFiles = await listFilesByExtension(root.photoDir, PHOTO_EXTENSIONS);
-      const { summaryPath, transcriptPath } = getArtifactPaths(meetingId);
-      const transcript = await readJsonFile(transcriptPath, isTranscriptArtifact);
-      const summary = await readJsonFile(summaryPath, isMeetingSummary);
+      const sourcePhotos = await listFilesByExtension(root.sourcePhotoDir, PHOTO_EXTENSIONS);
+      const transcript = await readJsonFile(root.transcriptPath, isTranscriptArtifact);
+      const summary = await readJsonFile(root.summaryPath, isMeetingSummary);
+      const { hasOptimizedPhotos, photos } = await buildRenderablePhotos(
+        root,
+        meetingId,
+        sourcePhotos,
+      );
       const status = toMeetingStatus(
         root.sourceLocation,
         Boolean(transcript),
         Boolean(summary),
+        hasOptimizedPhotos,
+        sourcePhotos.length,
       );
 
       return {
@@ -220,18 +326,16 @@ export async function listMeetings(): Promise<MeetingListItem[]> {
         sourceLocation: root.sourceLocation,
         status,
         audioCount: audioFiles.length,
-        photoCount: photoFiles.length,
+        photoCount: sourcePhotos.length,
         hasTranscript: Boolean(transcript),
         hasSummary: Boolean(summary),
+        hasOptimizedPhotos,
         updatedAt: summary?.meeting.generatedAt ?? transcript?.createdAt,
         kicker: summary?.hero.kicker,
         headline: summary?.hero.headline,
         dek: summary?.hero.dek,
         summaryGeneratedAt: summary?.meeting.generatedAt,
-        coverPhotoUrl:
-          photoFiles[0] === undefined
-            ? undefined
-            : `/api/meetings/${encodeURIComponent(meetingId)}/photos/${encodeURIComponent(photoFiles[0])}`,
+        coverPhotoUrl: photos[0]?.url,
       } satisfies MeetingListItem;
     }),
   );
@@ -240,8 +344,9 @@ export async function listMeetings(): Promise<MeetingListItem[]> {
     const statusRank: Record<MeetingStatus, number> = {
       "ready-to-archive": 0,
       archived: 1,
-      "needs-summary": 2,
-      "needs-transcription": 3,
+      "needs-photo-optimization": 2,
+      "needs-summary": 3,
+      "needs-transcription": 4,
     };
 
     const statusDifference = statusRank[left.status] - statusRank[right.status];
@@ -259,12 +364,22 @@ export async function getMeetingDetail(meetingId: string): Promise<MeetingDetail
 
   const safeMeetingId = normalizeSegment(meetingId, "meetingId");
   const root = await resolveMeetingRoot(safeMeetingId);
-  const { summaryPath, transcriptPath } = getArtifactPaths(safeMeetingId);
-  const transcript = await readJsonFile(transcriptPath, isTranscriptArtifact);
-  const summary = await readJsonFile(summaryPath, isMeetingSummary);
-  const photos = await listFilesByExtension(root.photoDir, PHOTO_EXTENSIONS);
+  const transcript = await readJsonFile(root.transcriptPath, isTranscriptArtifact);
+  const summary = await readJsonFile(root.summaryPath, isMeetingSummary);
+  const sourcePhotos = await listFilesByExtension(root.sourcePhotoDir, PHOTO_EXTENSIONS);
   const audioFiles = await listFilesByExtension(root.audioDir, AUDIO_EXTENSIONS);
-  const status = toMeetingStatus(root.sourceLocation, Boolean(transcript), Boolean(summary));
+  const { hasOptimizedPhotos, photos } = await buildRenderablePhotos(
+    root,
+    safeMeetingId,
+    sourcePhotos,
+  );
+  const status = toMeetingStatus(
+    root.sourceLocation,
+    Boolean(transcript),
+    Boolean(summary),
+    hasOptimizedPhotos,
+    sourcePhotos.length,
+  );
 
   return {
     id: safeMeetingId,
@@ -272,31 +387,27 @@ export async function getMeetingDetail(meetingId: string): Promise<MeetingDetail
     sourceLocation: root.sourceLocation,
     status,
     audioCount: audioFiles.length,
-    photoCount: photos.length,
+    photoCount: sourcePhotos.length,
     hasTranscript: Boolean(transcript),
     hasSummary: Boolean(summary),
+    hasOptimizedPhotos,
     updatedAt: summary?.meeting.generatedAt ?? transcript?.createdAt,
     kicker: summary?.hero.kicker,
     headline: summary?.hero.headline,
     dek: summary?.hero.dek,
     summaryGeneratedAt: summary?.meeting.generatedAt,
-    coverPhotoUrl:
-      photos[0] === undefined
-        ? undefined
-        : `/api/meetings/${encodeURIComponent(safeMeetingId)}/photos/${encodeURIComponent(photos[0])}`,
+    coverPhotoUrl: photos[0]?.url,
     transcript,
     summary,
-    photos: photos.map((fileName) => ({
-      fileName,
-      url: `/api/meetings/${encodeURIComponent(safeMeetingId)}/photos/${encodeURIComponent(fileName)}`,
-    })),
-    transcriptPath: path.relative(ROOT_DIR, transcriptPath),
-    summaryPath: path.relative(ROOT_DIR, summaryPath),
+    photos,
+    transcriptPath: path.relative(ROOT_DIR, root.transcriptPath),
+    summaryPath: path.relative(ROOT_DIR, root.summaryPath),
     sourceAudioPath: path.relative(ROOT_DIR, root.audioDir),
-    sourcePhotoPath: path.relative(ROOT_DIR, root.photoDir),
+    sourcePhotoPath: path.relative(ROOT_DIR, root.sourcePhotoDir),
     recommendedCommands: {
       status: `npm run status -- ${safeMeetingId}`,
       transcribe: `npm run transcribe -- ${safeMeetingId}`,
+      optimizePhotos: `npm run optimize-photos -- ${safeMeetingId}`,
       archive: `npm run archive -- ${safeMeetingId}`,
     },
   };
@@ -305,26 +416,36 @@ export async function getMeetingDetail(meetingId: string): Promise<MeetingDetail
 export async function getMeetingPhoto(
   meetingId: string,
   fileName: string,
-): Promise<{ body: Buffer; contentType: string }> {
+): Promise<{ body: Buffer; cacheControl: string; contentType: string }> {
   const safeMeetingId = normalizeSegment(meetingId, "meetingId");
   const safeFileName = normalizeSegment(fileName, "photoName");
   const root = await resolveMeetingRoot(safeMeetingId);
-  const filePath = path.join(root.photoDir, safeFileName);
-  const body = await fs.readFile(filePath);
-  const extension = path.extname(safeFileName).toLowerCase();
+  const artifactPath = path.join(root.artifactPhotoDir, safeFileName);
 
-  const contentType =
-    extension === ".avif"
-      ? "image/avif"
-      : extension === ".heic"
-        ? "image/heic"
-        : extension === ".png"
-          ? "image/png"
-          : extension === ".webp"
-            ? "image/webp"
-            : "image/jpeg";
+  if (await fileExists(artifactPath)) {
+    return {
+      body: await fs.readFile(artifactPath),
+      cacheControl: "public, max-age=31536000, immutable",
+      contentType: guessImageContentType(safeFileName),
+    };
+  }
 
-  return { body, contentType };
+  const sourcePath = path.join(root.sourcePhotoDir, safeFileName);
+
+  return {
+    body: await fs.readFile(sourcePath),
+    cacheControl: "no-store",
+    contentType: guessImageContentType(safeFileName),
+  };
+}
+
+async function ensurePhotoDerivativesReady(root: ResolvedMeetingRoot) {
+  const sourcePhotos = await listFilesByExtension(root.sourcePhotoDir, PHOTO_EXTENSIONS);
+  const manifest = await readPhotoManifest(root);
+
+  if (!(await hasUsableOptimizedPhotos(root, sourcePhotos, manifest))) {
+    throw new Error("照片 webp 衍生檔尚未完成，請先執行 npm run optimize-photos。");
+  }
 }
 
 export async function archiveMeetingRawInput(meetingId: string) {
@@ -345,6 +466,8 @@ export async function archiveMeetingRawInput(meetingId: string) {
     throw new Error("completed/ 內已存在同名會議，請先確認是否重複歸檔。");
   }
 
+  const root = await resolveMeetingRoot(safeMeetingId);
+  await ensurePhotoDerivativesReady(root);
   await fs.mkdir(COMPLETED_ROOT, { recursive: true });
   await fs.rename(uploadDir, completedDir);
 }

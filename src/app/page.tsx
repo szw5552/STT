@@ -37,7 +37,7 @@ export default async function Home() {
           <p className="max-w-[62ch] text-lg leading-8 text-[color:var(--color-muted)]">
             這個工作台會讀取 `upload/`、`artifacts/` 與 `completed/`
             的實際檔案狀態。現在可以直接用 `meeting-pipeline` skill
-            接手整條流程，從 Groq 轉錄、zh-TW 摘要到歸檔都沿著同一個入口往下跑。
+            接手整條流程，從 Groq 轉錄、zh-TW 摘要、照片轉成 webp 到歸檔都沿著同一個入口往下跑。
           </p>
           <div className="flex flex-wrap gap-3">
             <span className="rounded-full border border-[color:var(--color-line)] px-4 py-2 text-sm text-[color:var(--color-muted)]">
@@ -63,7 +63,7 @@ export default async function Home() {
               </li>
               <li>2. 用 `meeting-pipeline` skill 處理 `&lt;meeting-id&gt;`</li>
               <li>
-                3. skill 會依狀態自動續跑轉錄、摘要與歸檔，頁面完成後直接到
+                3. skill 會依狀態自動續跑轉錄、摘要、照片轉檔與歸檔，頁面完成後直接到
                 `/meetings/&lt;meeting-id&gt;`
               </li>
             </ol>
@@ -71,7 +71,7 @@ export default async function Home() {
 
           <div className="space-y-3 border-t border-[color:var(--color-line)] pt-5 text-sm leading-7 text-[color:var(--color-muted)]">
             <p className="font-semibold text-[color:var(--color-ink)]">資料夾契約</p>
-            <p>`upload/` 放原始素材，`artifacts/` 放 transcript 與 summary，`completed/` 放歸檔後的音檔與照片。</p>
+            <p>`upload/` 放原始素材，`artifacts/` 放 transcript、summary 與 webp 衍生圖，`completed/` 放歸檔後的音檔與照片。</p>
           </div>
         </aside>
       </section>
@@ -90,7 +90,7 @@ export default async function Home() {
             </div>
             <p className="max-w-[58ch] text-base leading-8 text-[color:var(--color-muted)]">
               {featuredMeeting.dek ??
-                "整理好的摘要會留在 artifacts，照片則跟著會議的原始素材走，讓這一頁永遠只負責閱讀與編排。"}
+                "整理好的摘要與 webp 照片衍生檔會留在 artifacts，原始素材則留在 upload 或 completed，讓這一頁永遠只負責閱讀與編排。"}
             </p>
             <div className="flex flex-wrap gap-4 text-sm text-[color:var(--color-muted)]">
               <span>{featuredMeeting.audioCount} 段錄音</span>
@@ -136,7 +136,9 @@ export default async function Home() {
                 <p className="mt-3 text-base leading-8 text-[color:var(--color-muted)]">
                   {featuredMeeting.hasTranscript
                     ? featuredMeeting.hasSummary
-                      ? "摘要已到位，現在只差讓 meeting-pipeline skill 完成最後的歸檔。"
+                      ? featuredMeeting.hasOptimizedPhotos
+                        ? "摘要與照片都已就位，現在只差讓 meeting-pipeline skill 完成最後的歸檔。"
+                        : "摘要已到位，接下來讓 meeting-pipeline skill 把所有照片轉成 webp 並接回頁面。"
                       : "逐字稿已準備好，現在可以用 meeting-pipeline skill 接手寫出 zh-TW 摘要。"
                     : "素材已進 upload，接下來直接交給 meeting-pipeline skill。"}
                 </p>
@@ -146,7 +148,7 @@ export default async function Home() {
                   檔案位置
                 </p>
                 <p className="mt-3 text-base leading-8 text-[color:var(--color-muted)]">
-                  `upload/{featuredMeeting.id}` 進來，`artifacts/{featuredMeeting.id}` 長出摘要，
+                  `upload/{featuredMeeting.id}` 進來，`artifacts/{featuredMeeting.id}` 長出摘要與 webp，
                   最後 `completed/{featuredMeeting.id}` 留住原始照片與錄音。
                 </p>
               </div>
@@ -213,7 +215,7 @@ export default async function Home() {
                   <div className="space-y-3">
                     <p className="max-w-[58ch] text-base leading-8 text-[color:var(--color-muted)]">
                       {meeting.dek ??
-                        "這場會議還在整理途中，等 transcript 與 summary 都補齊後，就能讀成完整的一頁生活誌。"}
+                       "這場會議還在整理途中，等 transcript、summary 與 webp 照片都補齊後，就能讀成完整的一頁生活誌。"}
                     </p>
                     <div className="flex flex-wrap gap-4 text-sm text-[color:var(--color-muted)]">
                       <span>{meeting.audioCount} 段錄音</span>

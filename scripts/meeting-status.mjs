@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import path from "node:path";
 import {
   ARTIFACT_ROOT,
   COMPLETED_ROOT,
@@ -7,10 +8,13 @@ import {
   ensurePipelineDirectories,
   fileExists,
   getMeetingDirectories,
+  isPhotoManifestArtifact,
   listMeetingAudioFiles,
   listMeetingIds,
   listMeetingPhotoFiles,
   readJsonIfExists,
+  sha256File,
+  sourceFilesMatchManifest,
 } from "./lib/meeting-paths.mjs";
 
 const requestedMeetingIds = process.argv.slice(2);
@@ -34,6 +38,34 @@ function isSummaryArtifact(value) {
     typeof value.meeting.id === "string" &&
     typeof value.meeting.title === "string"
   );
+}
+
+async function hasCurrentPhotoDerivatives(meetingId, sourceLocation, photoFiles, directories) {
+  if (photoFiles.length === 0 || sourceLocation === "artifacts-only") {
+    return true;
+  }
+
+  const sourceDir =
+    sourceLocation === "completed" ? directories.completedPhotoDir : directories.uploadPhotoDir;
+  const sourceFiles = await Promise.all(
+    photoFiles.map(async (fileName) => ({
+      fileName,
+      sha256: await sha256File(path.join(sourceDir, fileName)),
+    })),
+  );
+  const manifest = await readJsonIfExists(directories.photoManifestPath);
+
+  if (!isPhotoManifestArtifact(manifest) || !sourceFilesMatchManifest(manifest, sourceFiles)) {
+    return false;
+  }
+
+  const outputFilesExist = await Promise.all(
+    manifest.photos.map((photo) =>
+      fileExists(path.join(directories.artifactPhotoDir, photo.outputFileName)),
+    ),
+  );
+
+  return outputFilesExist.every(Boolean);
 }
 
 async function collectMeetingIds() {
@@ -63,11 +95,19 @@ async function getMeetingStatus(meetingId) {
   const summary = await readJsonIfExists(directories.summaryPath);
   const hasTranscript = isTranscriptArtifact(transcript);
   const hasSummary = isSummaryArtifact(summary);
+  const hasOptimizedPhotos = await hasCurrentPhotoDerivatives(
+    meetingId,
+    sourceLocation,
+    photoFiles,
+    directories,
+  );
 
   const nextAction = !hasTranscript
     ? "transcribe"
     : !hasSummary
       ? "summarize"
+      : photoFiles.length > 0 && !hasOptimizedPhotos
+        ? "optimize-photos"
       : sourceLocation === "upload"
         ? "archive"
         : "done";
@@ -79,7 +119,9 @@ async function getMeetingStatus(meetingId) {
     photoCount: photoFiles.length,
     hasTranscript,
     hasSummary,
+    hasOptimizedPhotos,
     nextAction,
+    photoManifestPath: directories.photoManifestPath,
     transcriptPath: directories.transcriptPath,
     summaryPath: directories.summaryPath,
     pagePath: `/meetings/${encodeURIComponent(meetingId)}`,

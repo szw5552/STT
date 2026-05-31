@@ -1,6 +1,7 @@
 export type MeetingStatus =
   | "needs-transcription"
   | "needs-summary"
+  | "needs-photo-optimization"
   | "ready-to-archive"
   | "archived";
 
@@ -65,6 +66,30 @@ export type MeetingSummary = {
   closingNote: string;
 };
 
+export type PhotoManifestSourceFile = {
+  fileName: string;
+  sha256: string;
+};
+
+export type PhotoManifestEntry = {
+  sourceFileName: string;
+  outputFileName: string;
+  sha256: string;
+  sourceMimeType: string;
+  width: number;
+  height: number;
+  sizeBytes: number;
+};
+
+export type PhotoManifestArtifact = {
+  schemaVersion: 1;
+  meetingId: string;
+  createdAt: string;
+  sourceLocation: "upload" | "completed";
+  sourceFiles: PhotoManifestSourceFile[];
+  photos: PhotoManifestEntry[];
+};
+
 export type MeetingPhoto = {
   fileName: string;
   url: string;
@@ -79,6 +104,7 @@ export type MeetingListItem = {
   photoCount: number;
   hasTranscript: boolean;
   hasSummary: boolean;
+  hasOptimizedPhotos: boolean;
   updatedAt?: string;
   kicker?: string;
   headline?: string;
@@ -98,6 +124,7 @@ export type MeetingDetail = MeetingListItem & {
   recommendedCommands: {
     status: string;
     transcribe: string;
+    optimizePhotos: string;
     archive: string;
   };
 };
@@ -166,5 +193,35 @@ export function isMeetingSummary(value: unknown): value is MeetingSummary {
     ) &&
     isStringArray(value.quotes) &&
     typeof value.closingNote === "string"
+  );
+}
+
+export function isPhotoManifestArtifact(value: unknown): value is PhotoManifestArtifact {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return (
+    value.schemaVersion === 1 &&
+    typeof value.meetingId === "string" &&
+    typeof value.createdAt === "string" &&
+    (value.sourceLocation === "upload" || value.sourceLocation === "completed") &&
+    Array.isArray(value.sourceFiles) &&
+    value.sourceFiles.every(
+      (item) =>
+        isRecord(item) && typeof item.fileName === "string" && typeof item.sha256 === "string",
+    ) &&
+    Array.isArray(value.photos) &&
+    value.photos.every(
+      (item) =>
+        isRecord(item) &&
+        typeof item.sourceFileName === "string" &&
+        typeof item.outputFileName === "string" &&
+        typeof item.sha256 === "string" &&
+        typeof item.sourceMimeType === "string" &&
+        typeof item.width === "number" &&
+        typeof item.height === "number" &&
+        typeof item.sizeBytes === "number",
+    )
   );
 }

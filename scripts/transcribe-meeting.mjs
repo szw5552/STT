@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { loadEnvConfig } from "@next/env";
+import nextEnv from "@next/env";
 import { createReadStream } from "node:fs";
 import { promises as fs } from "node:fs";
 import path from "node:path";
@@ -16,6 +16,8 @@ import {
   sha256File,
   writeJson,
 } from "./lib/meeting-paths.mjs";
+
+const { loadEnvConfig } = nextEnv;
 
 loadEnvConfig(ROOT_DIR);
 

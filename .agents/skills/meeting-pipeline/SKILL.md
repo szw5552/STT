@@ -1,6 +1,6 @@
 ---
 name: meeting-pipeline
-description: Use when you want one skill to take a meeting from upload/ through transcription, zh-TW summary generation, and archive, resuming safely from the current stage.
+description: Use when you want one skill to take a meeting from upload/ through transcription, zh-TW summary generation, photo webp generation, and archive, resuming safely from the current stage.
 ---
 
 Run the full meeting pipeline for this repository.
@@ -13,7 +13,8 @@ Take one meeting folder from `upload/<meeting-id>/` to a ready page at
 1. inspect current state,
 2. transcribe audio with Groq when needed,
 3. write `artifacts/<meeting-id>/summary.json` in zh-TW,
-4. archive raw inputs into `completed/<meeting-id>/` once the summary exists.
+4. convert every meeting photo into webp derivatives,
+5. archive raw inputs into `completed/<meeting-id>/` once the summary and webp photos exist.
 
 This skill is the primary entry point for the workflow. Use
 `meeting-summary` only when the user specifically wants to edit or regenerate
@@ -34,8 +35,10 @@ the summary step by itself.
    - read `.agents/skills/meeting-summary/summary.schema.json`,
    - write a valid zh-TW `artifacts/<meeting-id>/summary.json`.
 6. Run `npm run status -- <meeting-id>` again.
-7. If `nextAction` is `archive`, run `npm run archive -- <meeting-id>`.
-8. Run `npm run status -- <meeting-id>` one last time and confirm the meeting is
+7. If `nextAction` is `optimize-photos`, run `npm run optimize-photos -- <meeting-id>`.
+8. Run `npm run status -- <meeting-id>` again.
+9. If `nextAction` is `archive`, run `npm run archive -- <meeting-id>`.
+10. Run `npm run status -- <meeting-id>` one last time and confirm the meeting is
    now `done`, then report the page path.
 
 ## Output rules
@@ -46,7 +49,8 @@ the summary step by itself.
 - Respect the JSON schema exactly. No Markdown fences or comments.
 - If the transcript already matches the current audio hashes, keep the cached
   transcript instead of forcing a rewrite.
-- Only archive after `summary.json` exists.
+- Convert every photo found under `upload/<meeting-id>/photos` into a cached webp derivative before archiving.
+- Only archive after `summary.json` and the webp derivatives exist.
 
 ## Summary writing rules
 
@@ -59,4 +63,5 @@ the summary step by itself.
 
 - `npm run status -- <meeting-id>`
 - `npm run transcribe -- <meeting-id>`
+- `npm run optimize-photos -- <meeting-id>`
 - `npm run archive -- <meeting-id>`

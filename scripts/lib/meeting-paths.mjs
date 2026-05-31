@@ -75,6 +75,8 @@ export function getMeetingDirectories(meetingId) {
     uploadAudioDir: path.join(UPLOAD_ROOT, safeMeetingId, "audio"),
     uploadPhotoDir: path.join(UPLOAD_ROOT, safeMeetingId, "photos"),
     artifactDir: path.join(ARTIFACT_ROOT, safeMeetingId),
+    artifactPhotoDir: path.join(ARTIFACT_ROOT, safeMeetingId, "photos"),
+    photoManifestPath: path.join(ARTIFACT_ROOT, safeMeetingId, "photo-manifest.json"),
     transcriptPath: path.join(ARTIFACT_ROOT, safeMeetingId, "transcript.json"),
     summaryPath: path.join(ARTIFACT_ROOT, safeMeetingId, "summary.json"),
     completedDir: path.join(COMPLETED_ROOT, safeMeetingId),
@@ -154,6 +156,60 @@ export async function sha256File(filePath) {
   const hash = createHash("sha256");
   hash.update(content);
   return hash.digest("hex");
+}
+
+export function buildPhotoOutputFileName(sourceFileName, sha256) {
+  const parsed = path.parse(sourceFileName);
+  const safeBaseName =
+    parsed.name
+      .normalize("NFKD")
+      .replace(/[^\w.-]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "") || "photo";
+
+  return `${safeBaseName}.${sha256.slice(0, 12)}.webp`;
+}
+
+export function isPhotoManifestArtifact(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    value.schemaVersion === 1 &&
+    typeof value.meetingId === "string" &&
+    typeof value.createdAt === "string" &&
+    Array.isArray(value.sourceFiles) &&
+    value.sourceFiles.every(
+      (sourceFile) =>
+        sourceFile !== null &&
+        typeof sourceFile === "object" &&
+        typeof sourceFile.fileName === "string" &&
+        typeof sourceFile.sha256 === "string",
+    ) &&
+    Array.isArray(value.photos) &&
+    value.photos.every(
+      (photo) =>
+        photo !== null &&
+        typeof photo === "object" &&
+        typeof photo.sourceFileName === "string" &&
+        typeof photo.outputFileName === "string" &&
+        typeof photo.sha256 === "string" &&
+        typeof photo.sourceMimeType === "string" &&
+        typeof photo.width === "number" &&
+        typeof photo.height === "number" &&
+        typeof photo.sizeBytes === "number",
+    )
+  );
+}
+
+export function sourceFilesMatchManifest(manifest, sourceFiles) {
+  return (
+    manifest.sourceFiles.length === sourceFiles.length &&
+    manifest.sourceFiles.every(
+      (sourceFile, index) =>
+        sourceFile.fileName === sourceFiles[index]?.fileName &&
+        sourceFile.sha256 === sourceFiles[index]?.sha256,
+    )
+  );
 }
 
 export function guessMimeType(fileName) {

@@ -11,7 +11,7 @@ export async function GET(
 
   return new Response(new Uint8Array(photo.body), {
     headers: {
-      "Cache-Control": "no-store",
+      "Cache-Control": photo.cacheControl,
       "Content-Type": photo.contentType,
     },
   });

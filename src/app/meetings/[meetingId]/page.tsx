@@ -89,7 +89,7 @@ export default async function MeetingPage(props: {
           </h1>
           <p className="max-w-[60ch] text-lg leading-8 text-[color:var(--color-muted)]">
             {summary?.hero.dek ??
-              "這場會議還在編輯中。Groq 逐字稿與照片已經在旁邊排好位子，等 summary.json 寫完就會長成完整頁面。"}
+              "這場會議還在編輯中。Groq 逐字稿、webp 照片與版面都已經排好位子，等 summary.json 寫完就會長成完整頁面。"}
           </p>
           <div className="grid gap-4 text-sm text-[color:var(--color-muted)] md:grid-cols-3">
             <div className="border-t border-[color:var(--color-line)] pt-3">
@@ -296,7 +296,7 @@ export default async function MeetingPage(props: {
               </h2>
               <p className="max-w-[62ch] text-base leading-8 text-[color:var(--color-muted)]">
                 請直接用 `meeting-pipeline` skill 接手這場會議，它會依目前狀態續跑，
-                讀取 `{meeting.transcriptPath}`，寫出 `{meeting.summaryPath}`，必要時再完成歸檔。
+                讀取 `{meeting.transcriptPath}`，寫出 `{meeting.summaryPath}`，補齊 webp 照片後再完成歸檔。
               </p>
               {transcriptPreview ? (
                 <p className="max-w-[62ch] border-t border-[color:var(--color-line)] pt-5 text-base leading-8 text-[color:var(--color-muted)]">
@@ -374,6 +374,10 @@ export default async function MeetingPage(props: {
                 <dt className="font-semibold text-[color:var(--color-ink)]">摘要</dt>
                 <dd>{meeting.summaryPath}</dd>
               </div>
+              <div>
+                <dt className="font-semibold text-[color:var(--color-ink)]">webp 照片</dt>
+                <dd>{`artifacts/${meeting.id}/photos`}</dd>
+              </div>
             </dl>
           </section>
 
@@ -385,11 +389,12 @@ export default async function MeetingPage(props: {
               <p>用 `meeting-pipeline` skill 處理 `{meeting.id}`</p>
               <p>{meeting.recommendedCommands.status}</p>
               <p>{meeting.recommendedCommands.transcribe}</p>
+              <p>{meeting.recommendedCommands.optimizePhotos}</p>
               <p>{meeting.recommendedCommands.archive}</p>
             </div>
           </section>
 
-          {meeting.sourceLocation === "upload" && meeting.hasSummary ? (
+          {meeting.status === "ready-to-archive" ? (
             <form action={archiveMeetingAction}>
               <input name="meetingId" type="hidden" value={meeting.id} />
               <button
