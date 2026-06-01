@@ -105,6 +105,9 @@ export type PhotoManifestArtifact = {
 export type MeetingPhoto = {
   fileName: string;
   url: string;
+  originalUrl: string;
+  width?: number;
+  height?: number;
 };
 
 export type MeetingListItem = {
@@ -129,6 +132,8 @@ export type MeetingDetail = MeetingListItem & {
   transcript: TranscriptArtifact | null;
   summary: MeetingSummary | null;
   photos: MeetingPhoto[];
+  translatedTranscriptParagraphs: string[];
+  translatedTranscriptPath?: string;
   transcriptPath: string;
   summaryPath: string;
   sourceAudioPath: string;

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "status": "node scripts/meeting-status.mjs",
     "transcribe": "node scripts/transcribe-meeting.mjs",
+    "import-youtube-subs": "node scripts/import-youtube-subs.mjs",
     "archive": "node scripts/archive-meeting.mjs",
     "optimize-photos": "node scripts/optimize-meeting-photos.mjs",
     "publish-meeting": "node scripts/publish-meeting.mjs"

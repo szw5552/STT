@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { archiveMeetingAction } from "@/app/actions";
+import { MeetingPhotoCard } from "@/components/meeting-photo-card";
 import { MeetingStatusChip } from "@/components/meeting-status-chip";
 import { getMeetingDetail } from "@/lib/meetings/server";
 
@@ -80,6 +80,8 @@ export default async function MeetingPage(props: {
     .slice(0, 2)
     .join(" ")
     .slice(0, 280);
+  const translatedTranscriptPreview = meeting.translatedTranscriptParagraphs.slice(0, 5);
+  const translatedTranscriptRemainder = meeting.translatedTranscriptParagraphs.slice(5);
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-14 px-6 py-8 lg:px-10 lg:py-10">
@@ -123,19 +125,17 @@ export default async function MeetingPage(props: {
 
         <div className="grid gap-4 md:grid-cols-[1.15fr_0.85fr]">
           {meeting.photos[0] ? (
-            <figure className="overflow-hidden rounded-[2rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)]">
-              <Image
+            <MeetingPhotoCard
                 alt={`${meeting.title} 的主照片`}
-                className="h-full min-h-[440px] w-full object-cover"
-                src={meeting.photos[0].url}
-                unoptimized
-                width={1600}
-                height={1200}
-              />
-            </figure>
+                figureClassName="overflow-hidden rounded-[2rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)]"
+                imageClassName="h-full min-h-[440px] w-full object-cover"
+                imageHeight={1200}
+                imageWidth={1600}
+                photo={meeting.photos[0]}
+            />
           ) : (
             <div className="flex min-h-[440px] items-end rounded-[2rem] border border-[color:var(--color-line)] bg-[color:var(--color-primary-soft)] p-8">
-              <p className="max-w-[14ch] font-serif text-3xl leading-[1.05] text-[color:var(--color-ink)]">
+                <p className="max-w-[14ch] font-serif text-3xl leading-[1.05] text-[color:var(--color-ink)]">
                 這場會議還沒有照片，先讓文字站到前排。
               </p>
             </div>
@@ -143,19 +143,15 @@ export default async function MeetingPage(props: {
 
           <div className="grid gap-4">
             {meeting.photos.slice(1, 3).map((photo) => (
-              <figure
-                className="overflow-hidden rounded-[1.6rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)]"
+              <MeetingPhotoCard
+                alt={`${meeting.title} 的會議照片 ${photo.fileName}`}
+                figureClassName="overflow-hidden rounded-[1.6rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)]"
+                imageClassName="h-52 w-full object-cover"
+                imageHeight={900}
+                imageWidth={1200}
                 key={photo.fileName}
-              >
-                <Image
-                  alt={`${meeting.title} 的會議照片 ${photo.fileName}`}
-                  className="h-52 w-full object-cover"
-                  src={photo.url}
-                  unoptimized
-                  width={1200}
-                  height={900}
-                />
-              </figure>
+                photo={photo}
+              />
             ))}
 
             {!meeting.photos[1] && (
@@ -320,28 +316,74 @@ export default async function MeetingPage(props: {
             </section>
           )}
 
+          {meeting.translatedTranscriptParagraphs.length > 0 ? (
+            <section className="space-y-5 border-t border-[color:var(--color-line)] pt-6">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-accent)]">
+                    完整逐字稿
+                  </p>
+                  <p className="mt-2 max-w-[58ch] text-sm leading-7 text-[color:var(--color-muted)]">
+                    這裡收錄這場演講的完整 zh-TW 逐字稿，預設先展開前幾段，全文可往下展開閱讀。
+                  </p>
+                </div>
+                {meeting.translatedTranscriptPath ? (
+                  <p className="text-xs tracking-[0.14em] text-[color:var(--color-muted)]">
+                    來源：{meeting.translatedTranscriptPath}
+                  </p>
+                ) : null}
+              </div>
+
+              <div className="space-y-4">
+                {translatedTranscriptPreview.map((paragraph, index) => (
+                  <p
+                    className="max-w-[68ch] text-base leading-8 text-[color:var(--color-muted)]"
+                    key={`transcript-preview-${index}-${paragraph.slice(0, 24)}`}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              {translatedTranscriptRemainder.length > 0 ? (
+                <details className="group rounded-[1.6rem] border border-[color:var(--color-line)] bg-white px-5 py-4">
+                  <summary className="cursor-pointer list-none text-sm font-semibold tracking-[0.18em] text-[color:var(--color-primary)]">
+                    <span className="group-open:hidden">展開全文</span>
+                    <span className="hidden group-open:inline">收合全文</span>
+                  </summary>
+                  <div className="mt-5 space-y-4 border-t border-[color:var(--color-line)] pt-5">
+                    {translatedTranscriptRemainder.map((paragraph, index) => (
+                      <p
+                        className="max-w-[68ch] text-base leading-8 text-[color:var(--color-muted)]"
+                        key={`transcript-rest-${index}-${paragraph.slice(0, 24)}`}
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </details>
+              ) : null}
+            </section>
+          ) : null}
+
           {meeting.photos.length > 3 ? (
             <section className="space-y-5 border-t border-[color:var(--color-line)] pt-6">
               <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-primary)]">
                 補充照片
               </p>
-              <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr_0.9fr]">
-                {meeting.photos.slice(3, 6).map((photo, index) => (
-                  <figure
-                    className={`overflow-hidden rounded-[1.5rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] ${
-                      index === 0 ? "md:row-span-2" : ""
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {meeting.photos.slice(3).map((photo, index) => (
+                  <MeetingPhotoCard
+                    alt={`${meeting.title} 的補充照片 ${photo.fileName}`}
+                    figureClassName={`overflow-hidden rounded-[1.5rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] ${
+                      index % 5 === 0 ? "md:col-span-2 xl:col-span-2" : ""
                     }`}
+                    imageClassName={`w-full object-cover ${index % 5 === 0 ? "h-72 md:h-[26rem]" : "h-52 md:h-64"}`}
+                    imageHeight={900}
+                    imageWidth={1200}
                     key={photo.fileName}
-                  >
-                    <Image
-                      alt={`${meeting.title} 的補充照片 ${photo.fileName}`}
-                      className={`w-full object-cover ${index === 0 ? "h-full min-h-[420px]" : "h-52"}`}
-                      src={photo.url}
-                      unoptimized
-                      width={1200}
-                      height={900}
-                    />
-                  </figure>
+                    photo={photo}
+                  />
                 ))}
               </div>
             </section>

@@ -103,6 +103,7 @@ function getArtifactPaths(meetingId: string) {
     artifactPhotoDir: path.join(artifactDir, "photos"),
     photoManifestPath: path.join(artifactDir, "photo-manifest.json"),
     transcriptPath: path.join(artifactDir, "transcript.json"),
+    translatedTranscriptPath: path.join(artifactDir, "transcript.zh-TW.txt"),
     summaryPath: path.join(artifactDir, "summary.json"),
   };
 }
@@ -123,6 +124,10 @@ function guessImageContentType(fileName: string) {
 
 function buildPhotoUrl(meetingId: string, fileName: string) {
   return `/api/meetings/${encodeURIComponent(meetingId)}/photos/${encodeURIComponent(fileName)}`;
+}
+
+function buildSourcePhotoUrl(meetingId: string, fileName: string) {
+  return `/api/meetings/${encodeURIComponent(meetingId)}/source-photos/${encodeURIComponent(fileName)}`;
 }
 
 async function ensureDataRoots() {
@@ -208,6 +213,18 @@ async function readJsonFile<T>(
     const raw = await fs.readFile(filePath, "utf8");
     const parsed = JSON.parse(raw) as unknown;
     return validator(parsed) ? parsed : null;
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") {
+      return null;
+    }
+
+    throw error;
+  }
+}
+
+async function readTextFile(filePath: string): Promise<string | null> {
+  try {
+    return await fs.readFile(filePath, "utf8");
   } catch (error) {
     if (isNodeError(error) && error.code === "ENOENT") {
       return null;
@@ -325,6 +342,9 @@ async function buildRenderablePhotos(
       photos: manifest.photos.map((photo) => ({
         fileName: photo.sourceFileName,
         url: buildPhotoUrl(meetingId, photo.outputFileName),
+        originalUrl: buildSourcePhotoUrl(meetingId, photo.sourceFileName),
+        width: photo.width,
+        height: photo.height,
       })),
     };
   }
@@ -334,6 +354,7 @@ async function buildRenderablePhotos(
     photos: sourcePhotos.map((fileName) => ({
       fileName,
       url: buildPhotoUrl(meetingId, fileName),
+      originalUrl: buildSourcePhotoUrl(meetingId, fileName),
     })),
   };
 }
@@ -436,8 +457,10 @@ export async function getMeetingDetail(meetingId: string): Promise<MeetingDetail
 
   const safeMeetingId = normalizeSegment(meetingId, "meetingId");
   const root = await resolveMeetingRoot(safeMeetingId);
+  const artifactPaths = getArtifactPaths(safeMeetingId);
   const transcript = await readJsonFile(root.transcriptPath, isTranscriptArtifact);
   const summary = await readJsonFile(root.summaryPath, isMeetingSummary);
+  const translatedTranscriptText = await readTextFile(artifactPaths.translatedTranscriptPath);
   const sourcePhotos = await listFilesByExtension(root.sourcePhotoDir, PHOTO_EXTENSIONS);
   const audioFiles = await listFilesByExtension(root.audioDir, AUDIO_EXTENSIONS);
   const { hasOptimizedPhotos, photos } = await buildRenderablePhotos(
@@ -472,6 +495,15 @@ export async function getMeetingDetail(meetingId: string): Promise<MeetingDetail
     transcript,
     summary,
     photos,
+    translatedTranscriptParagraphs: translatedTranscriptText
+      ? translatedTranscriptText
+          .split(/\n{2,}/)
+          .map((paragraph) => paragraph.trim())
+          .filter(Boolean)
+      : [],
+    translatedTranscriptPath: translatedTranscriptText
+      ? path.relative(ROOT_DIR, artifactPaths.translatedTranscriptPath)
+      : undefined,
     transcriptPath: path.relative(ROOT_DIR, root.transcriptPath),
     summaryPath: path.relative(ROOT_DIR, root.summaryPath),
     sourceAudioPath: path.relative(ROOT_DIR, root.audioDir),
@@ -502,6 +534,22 @@ export async function getMeetingPhoto(
     };
   }
 
+  const sourcePath = path.join(root.sourcePhotoDir, safeFileName);
+
+  return {
+    body: await fs.readFile(sourcePath),
+    cacheControl: "no-store",
+    contentType: guessImageContentType(safeFileName),
+  };
+}
+
+export async function getMeetingSourcePhoto(
+  meetingId: string,
+  fileName: string,
+): Promise<{ body: Buffer; cacheControl: string; contentType: string }> {
+  const safeMeetingId = normalizeSegment(meetingId, "meetingId");
+  const safeFileName = normalizeSegment(fileName, "photoName");
+  const root = await resolveMeetingRoot(safeMeetingId);
   const sourcePath = path.join(root.sourcePhotoDir, safeFileName);
 
   return {

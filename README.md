@@ -1,37 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# STT
 
-## Getting Started
+把 `upload/<meeting-id>/audio/*` 與 `upload/<meeting-id>/photos/*` 轉成會議摘要頁面的 pipeline 專案。
 
-First, run the development server:
+## 常用命令
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run status -- <meeting-id>
+npm run transcribe -- <meeting-id>
+npm run import-youtube-subs -- <meeting-id> <youtube-url>
+npm run optimize-photos -- <meeting-id>
+npm run archive -- <meeting-id>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## YouTube 字幕匯入
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+如果影片本身已有字幕，可用本機安裝的 `yt-dlp` 直接把字幕轉成 `artifacts/<meeting-id>/transcript.json`，跳過 Groq 音訊轉錄。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run import-youtube-subs -- computex-keynote 'https://www.youtube.com/watch?v=DmoyA3HCPHc'
+```
 
-## Learn More
+也可以省略 `meeting-id`，直接用 YouTube `videoId` 當 meeting id：
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run import-youtube-subs -- 'https://www.youtube.com/watch?v=DmoyA3HCPHc'
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+可選參數：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run import-youtube-subs -- computex-keynote 'https://www.youtube.com/watch?v=DmoyA3HCPHc' --lang zh-TW,zh-Hant,zh,en
+```
 
-## Deploy on Vercel
+- 預設語言優先序：`zh-TW, zh-Hant, zh-Hans, zh, en`
+- 只會抓影片現成字幕／自動字幕，不會自動回退成音訊下載或 Groq 轉錄
+- 會把原始字幕快取到 `artifacts/<meeting-id>/captions/`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+接著就能沿用既有流程：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# STT
+```bash
+npm run status -- <meeting-id>
+```
+
+若狀態顯示需要摘要，直接執行 summary 階段即可。

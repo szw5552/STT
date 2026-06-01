@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "meeting": {
+    "id": "nvidia-gtc-2026",
+    "title": "黃仁勳 COMPUTEX 2026 主題演講",
+    "date": "2026-06-01",
+    "location": "台北 COMPUTEX 2026",
+    "language": "zh-TW",
+    "generatedAt": "2026-06-01T14:41:00+08:00",
+    "sourceLanguages": [
+      "en"
+    ]
+  },
+  "hero": {
+    "kicker": "GTC Taiwan 現場",
+    "headline": "代理式 AI 正式走上主舞台",
+    "dek": "黃仁勳在 COMPUTEX 2026 以台灣供應鏈與資料中心生態系為起點，串起 agentic AI、AI factory、Vera Rubin、Vera CPU 與未來個人電腦和機器人平台的完整藍圖。"
+  },
+  "agenda": [
+    "回顧台灣供應鏈與 NVIDIA 生態系在 AI 時代的角色",
+    "說明 agentic AI 已進入可實際創造產值的階段",
+    "展示 AI factory 的新基礎設施與 DSX 藍圖",
+    "發表以 Vera Rubin 與 Vera CPU 為核心的下一代運算平台",
+    "延伸到企業 AI、PC、機器人與全球區域型 AI cloud 的下一步"
+  ],
+  "attendees": [
+    "黃仁勳（NVIDIA 創辦人暨執行長）",
+    "台灣供應鏈、ODM／OEM 與資料中心生態系夥伴",
+    "GTC Taiwan 現場觀眾與全台 watch party 參與者"
+  ],
+  "highlights": [
+    {
+      "title": "從生成式 AI 走到代理式 AI",
+      "body": "演講一開始就把主軸拉回「useful AI has arrived」。黃仁勳以 GitHub 提交量暴增為例，說明代理式 AI 不只會寫字，而是已經能實際提高工程與企業產出，並把 token 直接轉化為營收與生產力。"
+    },
+    {
+      "title": "AI factory 成為新的基礎建設單位",
+      "body": "NVIDIA 將資料中心重新定義為 AI factory，強調晶片、機櫃、網路、供電、散熱與電網必須一體設計。DSX 被定位成建置與營運 AI factory 的藍圖，從 Omniverse 數位分身模擬，到上線後的功率配置、液冷與電網協調，都被納入同一套基礎設施敘事。"
+    },
+    {
+      "title": "Vera Rubin 不只是新 GPU，而是一整套 agent 系統",
+      "body": "黃仁勳把 Vera Rubin 描述成 NVIDIA 史上最有企圖心的工程，不是單一晶片，而是包含 GPU、Vera CPU、網路、安全與儲存的完整分散式系統。核心訊息是：未來的運算單位不再是單機應用，而是由模型、harness、tools、skills 與 runtime 組成的 agent。"
+    },
+    {
+      "title": "Vera CPU 對準的是『agent 的 CPU 市場』",
+      "body": "中段大量篇幅用來說明 Vera CPU 的定位：它不是延續傳統人類操作電腦的 CPU，而是為大量 impatient agents 設計的新型工作負載平台。黃仁勳反覆強調，隨著每家公司都會開始營運 agents，CPU for agents 會成為一個比上一代更大的市場。"
+    },
+    {
+      "title": "從企業到 PC，再到機器人，運算模式會整體複製",
+      "body": "演講尾聲把同一套 agentic computing pattern 延伸到企業 AI、Windows PC、邊緣設備與機器人。結論不是單點產品發表，而是 NVIDIA 正把自己從 GPU 公司一路推進到系統公司，再到面向 AI factory 與 agent 世界的 infrastructure company。"
+    }
+  ],
+  "decisions": [
+    "NVIDIA 將把 agentic AI 視為下一個十年的核心運算模式，並以此重整產品與平台敘事。",
+    "Vera Rubin 被定位為面向 agent 世界的下一代主力基礎設施，而不是單一 GPU 升級。",
+    "DSX 將作為 AI factory 的參考架構，整合模擬、部署、功率管理、散熱與營運。",
+    "NVIDIA 會持續把 CUDA-X libraries、企業 AI 工具鏈與安全能力包裝成 agents 可直接使用的 skills 與平台。"
+  ],
+  "actionItems": [
+    {
+      "owner": "台灣供應鏈與系統夥伴",
+      "task": "對齊 Vera Rubin、Vera CPU 與 AI factory 的基礎設施節奏，準備支援更大規模的機櫃、散熱、供電與整機交付。"
+    },
+    {
+      "owner": "企業與雲端客戶",
+      "task": "評估把內部工作流改造成 agent-driven 流程，並為 tools、memory、security harness 與 runtime 建立可上線的治理方式。"
+    },
+    {
+      "owner": "NVIDIA 軟體與生態系團隊",
+      "task": "持續把 CUDA-X、企業 AI 與機器人工具鏈封裝成 agent 可調用的 skills，降低代理式系統接入門檻。"
+    }
+  ],
+  "quotes": [
+    "有用的 AI 已經到來。",
+    "這是 AI 被製造出來的方式：一種新的工廠，既生成 token，也生成智能。",
+    "Vera Rubin 不只是一顆 GPU，而是一整套為 agents 打造的分散式系統。"
+  ],
+  "closingNote": "這場演講真正想交代的，不只是幾個新名詞或單一新品，而是 NVIDIA 對下一輪產業分工的完整定義：台灣供應鏈負責把基礎設施做深做大，NVIDIA 把模型、系統與工廠級平台串成一條線，而企業與開發者則開始把 agent 當成新的運算單位。對會後回看這頁的人來說，最值得記住的不是某個規格數字，而是『agent 成了產品、資料中心成了工廠、整個生態系都得跟著重排』。"
+}
