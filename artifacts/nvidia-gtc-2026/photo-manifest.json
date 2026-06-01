@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "meetingId": "nvidia-gtc-2026",
+  "createdAt": "2026-06-01T07:37:49.653Z",
+  "sourceLocation": "completed",
+  "sourceFiles": [
+    {
+      "fileName": "710799575_1041541471529649_2234512359286695060_n.jpg",
+      "sha256": "4175a1c045771410604e824fb53bafa17b6a6cd146c43768b6e6ec91d78d2236"
+    },
+    {
+      "fileName": "HJs0sfAaUAAnrkb.jpeg",
+      "sha256": "68e9fba9e748e702d5309354b372e9cc24724dfeac14150138e8020f7c993a4e"
+    },
+    {
+      "fileName": "IMG_8345.HEIC",
+      "sha256": "4022322f3c832a8eef56c078c01c7ba8865d950267b53e21d9d0a559b4e25a44"
+    },
+    {
+      "fileName": "IMG_8347.HEIC",
+      "sha256": "235c71f160f62387a924f10e0f7c8ec27ec9fe3680bce5921474061d7737b72f"
+    },
+    {
+      "fileName": "IMG_8350.HEIC",
+      "sha256": "ee96fd754a1a2980173623c48663776386ec3e1203f54d7d90c96b3df6c24fcd"
+    },
+    {
+      "fileName": "IMG_8353.HEIC",
+      "sha256": "7845297b3676f6613c01a5b067a2fe0f2b41e405c95a2ece3fea57fc31a3908b"
+    },
+    {
+      "fileName": "IMG_8367.HEIC",
+      "sha256": "c1abe40e617623bd939083e83e0f1bef1c19b60b9c2783ff662ed9b6624d4f90"
+    },
+    {
+      "fileName": "IMG_8379.HEIC",
+      "sha256": "c129e36909333f9ba4e2029056117248393e445e06adc9a77cd90423074d3ff9"
+    },
+    {
+      "fileName": "IMG_8380.HEIC",
+      "sha256": "336b644a7c09b54baae4f9ddb8f413d1e8435ffc7f23ad7a76df07ee41805f80"
+    },
+    {
+      "fileName": "IMG_8381.HEIC",
+      "sha256": "f036a0ccbb36be40b7bbda9ee1565e90ef4edfe82f38c0e824f571bbbeeb3b7c"
+    },
+    {
+      "fileName": "IMG_8382.HEIC",
+      "sha256": "5f541cca60e962cde62fd67fe6065234bb32af72a333242f7f05c1fa97bee3c2"
+    },
+    {
+      "fileName": "IMG_8383.HEIC",
+      "sha256": "a87327a3e5b1c22a475b1e6a878ae695f887bffb2dd37fcfec3ad9864ed8d812"
+    }
+  ],
+  "photos": [
+    {
+      "sourceFileName": "710799575_1041541471529649_2234512359286695060_n.jpg",
+      "outputFileName": "710799575_1041541471529649_2234512359286695060_n.4175a1c04577.webp",
+      "sha256": "4175a1c045771410604e824fb53bafa17b6a6cd146c43768b6e6ec91d78d2236",
+      "sourceMimeType": "image/jpeg",
+      "width": 1152,
+      "height": 2048,
+      "sizeBytes": 226342
+    },
+    {
+      "sourceFileName": "HJs0sfAaUAAnrkb.jpeg",
+      "outputFileName": "HJs0sfAaUAAnrkb.68e9fba9e748.webp",
+      "sha256": "68e9fba9e748e702d5309354b372e9cc24724dfeac14150138e8020f7c993a4e",
+      "sourceMimeType": "image/jpeg",
+      "width": 4096,
+      "height": 2304,
+      "sizeBytes": 764846
+    },
+    {
+      "sourceFileName": "IMG_8345.HEIC",
+      "outputFileName": "IMG_8345.4022322f3c83.webp",
+      "sha256": "4022322f3c832a8eef56c078c01c7ba8865d950267b53e21d9d0a559b4e25a44",
+      "sourceMimeType": "image/heic",
+      "width": 3024,
+      "height": 4032,
+      "sizeBytes": 817788
+    },
+    {
+      "sourceFileName": "IMG_8347.HEIC",
+      "outputFileName": "IMG_8347.235c71f160f6.webp",
+      "sha256": "235c71f160f62387a924f10e0f7c8ec27ec9fe3680bce5921474061d7737b72f",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 1080332
+    },
+    {
+      "sourceFileName": "IMG_8350.HEIC",
+      "outputFileName": "IMG_8350.ee96fd754a1a.webp",
+      "sha256": "ee96fd754a1a2980173623c48663776386ec3e1203f54d7d90c96b3df6c24fcd",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 1414734
+    },
+    {
+      "sourceFileName": "IMG_8353.HEIC",
+      "outputFileName": "IMG_8353.7845297b3676.webp",
+      "sha256": "7845297b3676f6613c01a5b067a2fe0f2b41e405c95a2ece3fea57fc31a3908b",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 758406
+    },
+    {
+      "sourceFileName": "IMG_8367.HEIC",
+      "outputFileName": "IMG_8367.c1abe40e6176.webp",
+      "sha256": "c1abe40e617623bd939083e83e0f1bef1c19b60b9c2783ff662ed9b6624d4f90",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 309230
+    },
+    {
+      "sourceFileName": "IMG_8379.HEIC",
+      "outputFileName": "IMG_8379.c129e3690933.webp",
+      "sha256": "c129e36909333f9ba4e2029056117248393e445e06adc9a77cd90423074d3ff9",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 447696
+    },
+    {
+      "sourceFileName": "IMG_8380.HEIC",
+      "outputFileName": "IMG_8380.336b644a7c09.webp",
+      "sha256": "336b644a7c09b54baae4f9ddb8f413d1e8435ffc7f23ad7a76df07ee41805f80",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 296364
+    },
+    {
+      "sourceFileName": "IMG_8381.HEIC",
+      "outputFileName": "IMG_8381.f036a0ccbb36.webp",
+      "sha256": "f036a0ccbb36be40b7bbda9ee1565e90ef4edfe82f38c0e824f571bbbeeb3b7c",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 329824
+    },
+    {
+      "sourceFileName": "IMG_8382.HEIC",
+      "outputFileName": "IMG_8382.5f541cca60e9.webp",
+      "sha256": "5f541cca60e962cde62fd67fe6065234bb32af72a333242f7f05c1fa97bee3c2",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 273902
+    },
+    {
+      "sourceFileName": "IMG_8383.HEIC",
+      "outputFileName": "IMG_8383.a87327a3e5b1.webp",
+      "sha256": "a87327a3e5b1c22a475b1e6a878ae695f887bffb2dd37fcfec3ad9864ed8d812",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 311816
+    }
+  ]
+}
