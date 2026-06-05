@@ -35,6 +35,54 @@ function formatSourceLocationLabel(sourceLocation: "upload" | "completed" | "pub
       : "completed/";
 }
 
+function chunkLongTranscriptParagraph(paragraph: string, targetLength = 1200) {
+  const normalized = paragraph.replace(/\s+/g, " ").trim();
+  const chunks: string[] = [];
+  let start = 0;
+
+  while (start < normalized.length) {
+    const remainingLength = normalized.length - start;
+
+    if (remainingLength <= targetLength) {
+      chunks.push(normalized.slice(start).trim());
+      break;
+    }
+
+    const searchEnd = Math.min(normalized.length, start + targetLength);
+    const window = normalized.slice(start, searchEnd);
+    const punctuationBreak = Math.max(
+      window.lastIndexOf("。"),
+      window.lastIndexOf("！"),
+      window.lastIndexOf("？"),
+      window.lastIndexOf("."),
+      window.lastIndexOf("!"),
+      window.lastIndexOf("?"),
+    );
+    const spaceBreak = window.lastIndexOf(" ");
+    const relativeEnd =
+      punctuationBreak > targetLength * 0.45
+        ? punctuationBreak + 1
+        : spaceBreak > targetLength * 0.45
+          ? spaceBreak
+          : targetLength;
+
+    chunks.push(normalized.slice(start, start + relativeEnd).trim());
+    start += relativeEnd;
+  }
+
+  return chunks.filter(Boolean);
+}
+
+function splitTranscriptText(value: string) {
+  return value
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .flatMap((paragraph) =>
+      paragraph.length > 1600 ? chunkLongTranscriptParagraph(paragraph) : [paragraph],
+    );
+}
+
 export async function generateMetadata(
   props: {
     params: Promise<{ meetingId: string }>;
@@ -80,8 +128,22 @@ export default async function MeetingPage(props: {
     .slice(0, 2)
     .join(" ")
     .slice(0, 280);
-  const translatedTranscriptPreview = meeting.translatedTranscriptParagraphs.slice(0, 5);
-  const translatedTranscriptRemainder = meeting.translatedTranscriptParagraphs.slice(5);
+  const transcriptParagraphs =
+    meeting.translatedTranscriptParagraphs.length > 0
+      ? meeting.translatedTranscriptParagraphs
+      : meeting.transcript?.text
+        ? splitTranscriptText(meeting.transcript.text)
+        : [];
+  const transcriptCharacterCount =
+    meeting.translatedTranscriptParagraphs.length > 0
+      ? meeting.translatedTranscriptParagraphs.join("").length
+      : meeting.transcript?.text.length;
+  const transcriptSourceLabel =
+    meeting.translatedTranscriptParagraphs.length > 0 ? "zh-TW 逐字稿" : "原始逐字稿";
+  const transcriptSourcePath =
+    meeting.translatedTranscriptParagraphs.length > 0
+      ? meeting.translatedTranscriptPath
+      : meeting.transcriptPath;
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-14 px-6 py-8 lg:px-10 lg:py-10">
@@ -213,62 +275,6 @@ export default async function MeetingPage(props: {
                 </section>
               )}
 
-              <section className="grid gap-8 border-t border-[color:var(--color-line)] pt-6 md:grid-cols-2">
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-accent)]">
-                    決議
-                  </p>
-                  <div className="space-y-3">
-                    {summary.decisions.length > 0 ? (
-                      summary.decisions.map((decision) => (
-                        <p
-                          className="rounded-[1.2rem] border border-[color:var(--color-line)] bg-white px-4 py-4 text-sm leading-7 text-[color:var(--color-ink)]"
-                          key={decision}
-                        >
-                          {decision}
-                        </p>
-                      ))
-                    ) : (
-                      <p className="text-sm leading-7 text-[color:var(--color-muted)]">
-                        目前摘要沒有列出明確決議。
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-primary)]">
-                    待辦
-                  </p>
-                  <div className="space-y-3">
-                    {summary.actionItems.length > 0 ? (
-                      summary.actionItems.map((item) => (
-                        <article
-                          className="rounded-[1.2rem] border border-[color:var(--color-line)] bg-[color:var(--color-surface)] px-4 py-4"
-                          key={`${item.owner}-${item.task}`}
-                        >
-                          <p className="text-sm font-semibold text-[color:var(--color-ink)]">
-                            {item.owner}
-                          </p>
-                          <p className="mt-1 text-sm leading-7 text-[color:var(--color-muted)]">
-                            {item.task}
-                          </p>
-                          {item.due ? (
-                            <p className="mt-2 text-xs font-semibold tracking-[0.14em] text-[color:var(--color-accent)]">
-                              截止 {item.due}
-                            </p>
-                          ) : null}
-                        </article>
-                      ))
-                    ) : (
-                      <p className="text-sm leading-7 text-[color:var(--color-muted)]">
-                        目前摘要沒有列出待辦。
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </section>
-
               {summary.quotes.length > 0 && (
                 <section className="space-y-5 border-t border-[color:var(--color-line)] pt-6">
                   <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-accent)]">
@@ -316,53 +322,47 @@ export default async function MeetingPage(props: {
             </section>
           )}
 
-          {meeting.translatedTranscriptParagraphs.length > 0 ? (
+          {transcriptParagraphs.length > 0 ? (
             <section className="space-y-5 border-t border-[color:var(--color-line)] pt-6">
               <div className="flex flex-wrap items-end justify-between gap-3">
                 <div>
                   <p className="text-sm font-semibold tracking-[0.18em] text-[color:var(--color-accent)]">
-                    完整逐字稿
+                    完整會議逐字稿
                   </p>
                   <p className="mt-2 max-w-[58ch] text-sm leading-7 text-[color:var(--color-muted)]">
-                    這裡收錄這場演講的完整 zh-TW 逐字稿，預設先展開前幾段，全文可往下展開閱讀。
+                    這裡收錄{transcriptSourceLabel}，文字較長，預設先收合。需要核對細節時再展開全文閱讀。
                   </p>
                 </div>
-                {meeting.translatedTranscriptPath ? (
+                {transcriptSourcePath ? (
                   <p className="text-xs tracking-[0.14em] text-[color:var(--color-muted)]">
-                    來源：{meeting.translatedTranscriptPath}
+                    來源：{transcriptSourcePath}
                   </p>
                 ) : null}
               </div>
 
-              <div className="space-y-4">
-                {translatedTranscriptPreview.map((paragraph, index) => (
-                  <p
-                    className="max-w-[68ch] text-base leading-8 text-[color:var(--color-muted)]"
-                    key={`transcript-preview-${index}-${paragraph.slice(0, 24)}`}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-
-              {translatedTranscriptRemainder.length > 0 ? (
-                <details className="group rounded-[1.6rem] border border-[color:var(--color-line)] bg-white px-5 py-4">
-                  <summary className="cursor-pointer list-none text-sm font-semibold tracking-[0.18em] text-[color:var(--color-primary)]">
-                    <span className="group-open:hidden">展開全文</span>
-                    <span className="hidden group-open:inline">收合全文</span>
-                  </summary>
-                  <div className="mt-5 space-y-4 border-t border-[color:var(--color-line)] pt-5">
-                    {translatedTranscriptRemainder.map((paragraph, index) => (
-                      <p
-                        className="max-w-[68ch] text-base leading-8 text-[color:var(--color-muted)]"
-                        key={`transcript-rest-${index}-${paragraph.slice(0, 24)}`}
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                </details>
-              ) : null}
+              <details className="group rounded-[1.4rem] border border-[color:var(--color-line)] bg-white px-5 py-4">
+                <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-3 text-sm font-semibold text-[color:var(--color-primary)]">
+                  <span className="tracking-[0.14em]">
+                    <span className="group-open:hidden">展開完整逐字稿</span>
+                    <span className="hidden group-open:inline">收合完整逐字稿</span>
+                  </span>
+                  {transcriptCharacterCount ? (
+                    <span className="font-normal tracking-normal text-[color:var(--color-muted)]">
+                      約 {transcriptCharacterCount.toLocaleString("zh-TW")} 字
+                    </span>
+                  ) : null}
+                </summary>
+                <div className="mt-5 max-h-[70vh] space-y-4 overflow-y-auto border-t border-[color:var(--color-line)] pt-5 pr-2">
+                  {transcriptParagraphs.map((paragraph, index) => (
+                    <p
+                      className="max-w-[68ch] text-base leading-8 text-[color:var(--color-muted)]"
+                      key={`transcript-${index}-${paragraph.slice(0, 24)}`}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </details>
             </section>
           ) : null}
 

@@ -72,8 +72,8 @@ export type MeetingSummary = {
   agenda: string[];
   attendees: string[];
   highlights: MeetingHighlight[];
-  decisions: string[];
-  actionItems: MeetingActionItem[];
+  decisions?: string[];
+  actionItems?: MeetingActionItem[];
   quotes: string[];
   closingNote: string;
 };
@@ -238,15 +238,16 @@ export function isMeetingSummary(value: unknown): value is MeetingSummary {
       (item) =>
         isRecord(item) && typeof item.title === "string" && typeof item.body === "string",
     ) &&
-    isStringArray(value.decisions) &&
-    Array.isArray(value.actionItems) &&
-    value.actionItems.every(
-      (item) =>
-        isRecord(item) &&
-        typeof item.owner === "string" &&
-        typeof item.task === "string" &&
-        (item.due === undefined || typeof item.due === "string"),
-    ) &&
+    (value.decisions === undefined || isStringArray(value.decisions)) &&
+    (value.actionItems === undefined ||
+      (Array.isArray(value.actionItems) &&
+        value.actionItems.every(
+          (item) =>
+            isRecord(item) &&
+            typeof item.owner === "string" &&
+            typeof item.task === "string" &&
+            (item.due === undefined || typeof item.due === "string"),
+        ))) &&
     isStringArray(value.quotes) &&
     typeof value.closingNote === "string"
   );

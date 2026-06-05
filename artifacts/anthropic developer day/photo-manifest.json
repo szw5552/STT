@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "meetingId": "anthropic developer day",
+  "createdAt": "2026-06-05T11:13:46.744Z",
+  "sourceLocation": "upload",
+  "sourceFiles": [
+    {
+      "fileName": "IMG_8457.HEIC",
+      "sha256": "b786adda562f4f3e10b36fab0ad3c912886ee2cdd88ca22edd9d3a61fc5dc898"
+    },
+    {
+      "fileName": "IMG_8458.HEIC",
+      "sha256": "ab84f4a5cd59af31424fc6b3e5ac02e895b08c3ae3e518bb1b6c3239ad7dd317"
+    },
+    {
+      "fileName": "IMG_8459.HEIC",
+      "sha256": "821499eb5680124ea9f995e5c59351d0c8ef4c844ca432e46d9a58a92cfb3a91"
+    },
+    {
+      "fileName": "IMG_8460.HEIC",
+      "sha256": "440a64c9982f1fc2dd00ca17301ad466b2d9e7dabc5963f5771708a04f136681"
+    },
+    {
+      "fileName": "IMG_8461.HEIC",
+      "sha256": "8c37e2a05e6fa0025db8c4dcdd1479090fb61d31977725bae72ca804cea1c49e"
+    },
+    {
+      "fileName": "IMG_8463.HEIC",
+      "sha256": "7eaa83fc7d4d78e5236756c947e9f5a642c434355e35a2331f76ae630c35c244"
+    },
+    {
+      "fileName": "IMG_8464.HEIC",
+      "sha256": "ad03ca63bceca51e8bd03bf5c08bc80ff89794e49aea17e0fcde942a2df48a55"
+    },
+    {
+      "fileName": "IMG_8465.HEIC",
+      "sha256": "566020254a8989b02fd3c275fc35b1b674601a717838e019ef9d502dfd8f116e"
+    },
+    {
+      "fileName": "IMG_8467.HEIC",
+      "sha256": "3cca9abbc11f57c867744b2ea61b31aa7fbdef78f377ee38c69545ff10904bd7"
+    },
+    {
+      "fileName": "IMG_8468.HEIC",
+      "sha256": "6aef8f6448b870236469448d2e03e911b0d5e54c46489434c9114829f31e0c8a"
+    },
+    {
+      "fileName": "IMG_8469.HEIC",
+      "sha256": "42f46006fb9b9764fdbfc4d818ec91317015b84109fd99cc95d81ebf4ccbe051"
+    },
+    {
+      "fileName": "IMG_8470.HEIC",
+      "sha256": "687071d78a10d2fe12e002adc1986cc171d897ea14f924123a6b5237a0963173"
+    },
+    {
+      "fileName": "IMG_8471.HEIC",
+      "sha256": "c1d78efe8b37506c57740af7fde3f30bdd492b53603a601a76665b7e80858313"
+    },
+    {
+      "fileName": "IMG_8472.HEIC",
+      "sha256": "f3238092e7271a2780f681a6d1d8c65df80843ddd9269560af8d3e7ae8d3e901"
+    }
+  ],
+  "photos": [
+    {
+      "sourceFileName": "IMG_8457.HEIC",
+      "outputFileName": "IMG_8457.b786adda562f.webp",
+      "sha256": "b786adda562f4f3e10b36fab0ad3c912886ee2cdd88ca22edd9d3a61fc5dc898",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 317344
+    },
+    {
+      "sourceFileName": "IMG_8458.HEIC",
+      "outputFileName": "IMG_8458.ab84f4a5cd59.webp",
+      "sha256": "ab84f4a5cd59af31424fc6b3e5ac02e895b08c3ae3e518bb1b6c3239ad7dd317",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 259158
+    },
+    {
+      "sourceFileName": "IMG_8459.HEIC",
+      "outputFileName": "IMG_8459.821499eb5680.webp",
+      "sha256": "821499eb5680124ea9f995e5c59351d0c8ef4c844ca432e46d9a58a92cfb3a91",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 265640
+    },
+    {
+      "sourceFileName": "IMG_8460.HEIC",
+      "outputFileName": "IMG_8460.440a64c9982f.webp",
+      "sha256": "440a64c9982f1fc2dd00ca17301ad466b2d9e7dabc5963f5771708a04f136681",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 570236
+    },
+    {
+      "sourceFileName": "IMG_8461.HEIC",
+      "outputFileName": "IMG_8461.8c37e2a05e6f.webp",
+      "sha256": "8c37e2a05e6fa0025db8c4dcdd1479090fb61d31977725bae72ca804cea1c49e",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 313190
+    },
+    {
+      "sourceFileName": "IMG_8463.HEIC",
+      "outputFileName": "IMG_8463.7eaa83fc7d4d.webp",
+      "sha256": "7eaa83fc7d4d78e5236756c947e9f5a642c434355e35a2331f76ae630c35c244",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 258396
+    },
+    {
+      "sourceFileName": "IMG_8464.HEIC",
+      "outputFileName": "IMG_8464.ad03ca63bcec.webp",
+      "sha256": "ad03ca63bceca51e8bd03bf5c08bc80ff89794e49aea17e0fcde942a2df48a55",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 360616
+    },
+    {
+      "sourceFileName": "IMG_8465.HEIC",
+      "outputFileName": "IMG_8465.566020254a89.webp",
+      "sha256": "566020254a8989b02fd3c275fc35b1b674601a717838e019ef9d502dfd8f116e",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 284356
+    },
+    {
+      "sourceFileName": "IMG_8467.HEIC",
+      "outputFileName": "IMG_8467.3cca9abbc11f.webp",
+      "sha256": "3cca9abbc11f57c867744b2ea61b31aa7fbdef78f377ee38c69545ff10904bd7",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 309198
+    },
+    {
+      "sourceFileName": "IMG_8468.HEIC",
+      "outputFileName": "IMG_8468.6aef8f6448b8.webp",
+      "sha256": "6aef8f6448b870236469448d2e03e911b0d5e54c46489434c9114829f31e0c8a",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 325444
+    },
+    {
+      "sourceFileName": "IMG_8469.HEIC",
+      "outputFileName": "IMG_8469.42f46006fb9b.webp",
+      "sha256": "42f46006fb9b9764fdbfc4d818ec91317015b84109fd99cc95d81ebf4ccbe051",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 368302
+    },
+    {
+      "sourceFileName": "IMG_8470.HEIC",
+      "outputFileName": "IMG_8470.687071d78a10.webp",
+      "sha256": "687071d78a10d2fe12e002adc1986cc171d897ea14f924123a6b5237a0963173",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 330610
+    },
+    {
+      "sourceFileName": "IMG_8471.HEIC",
+      "outputFileName": "IMG_8471.c1d78efe8b37.webp",
+      "sha256": "c1d78efe8b37506c57740af7fde3f30bdd492b53603a601a76665b7e80858313",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 245496
+    },
+    {
+      "sourceFileName": "IMG_8472.HEIC",
+      "outputFileName": "IMG_8472.f3238092e727.webp",
+      "sha256": "f3238092e7271a2780f681a6d1d8c65df80843ddd9269560af8d3e7ae8d3e901",
+      "sourceMimeType": "image/heic",
+      "width": 4032,
+      "height": 3024,
+      "sizeBytes": 329290
+    }
+  ]
+}

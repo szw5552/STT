@@ -19,9 +19,10 @@ Read one `artifacts/<meeting-id>/transcript.json` file, then write a matching
    - A single source file may itself have been split into multiple ordered upload
      segments before transcription because of Groq's 25 MB limit.
 2. Read `.agents/skills/meeting-summary/summary.schema.json`.
-3. Infer the meeting's main topic, attendees, agenda, highlights, decisions,
-   action items, and memorable quotes from the full combined transcript text
-   across all files and segments.
+3. Infer the meeting's main topic, attendees, agenda, highlights, and
+   memorable quotes from the full combined transcript text across all files and
+   segments. Do not generate separate decisions or action item sections unless
+   the user explicitly asks for them.
 4. Write valid JSON to `artifacts/<meeting-id>/summary.json`.
 
 ## Output rules
@@ -40,5 +41,5 @@ Read one `artifacts/<meeting-id>/transcript.json` file, then write a matching
 
 - Keep the voice warm, precise, and edited, like a carefully prepared meeting
   note in a lifestyle magazine.
-- Prioritize what happened, what was decided, and what people should do next.
+- Prioritize what happened, the narrative context, and what someone reopening the page should understand.
 - Avoid generic filler, sales language, and vague summaries.

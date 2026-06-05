@@ -13,8 +13,9 @@ Take one meeting folder from `upload/<meeting-id>/` to a ready page at
 1. inspect current state,
 2. transcribe audio with Groq when needed,
 3. write `artifacts/<meeting-id>/summary.json` in zh-TW,
-4. convert every meeting photo into webp derivatives,
-5. archive raw inputs into `completed/<meeting-id>/` once the summary and webp photos exist.
+4. write `artifacts/<meeting-id>/transcript.zh-TW.txt` as a polished readable Traditional Chinese transcript,
+5. convert every meeting photo into webp derivatives,
+6. archive raw inputs into `completed/<meeting-id>/` once the summary, polished transcript, and webp photos exist.
 
 This skill is the primary entry point for the workflow. Use
 `meeting-summary` only when the user specifically wants to edit or regenerate
@@ -44,11 +45,19 @@ the summary step by itself.
    - treat the transcript as the combined content of all source audio files and
      segments in order,
    - write a valid zh-TW `artifacts/<meeting-id>/summary.json`.
-6. Run `npm run status -- <meeting-id>` again.
-7. If `nextAction` is `optimize-photos`, run `npm run optimize-photos -- <meeting-id>`.
-8. Run `npm run status -- <meeting-id>` again.
-9. If `nextAction` is `archive`, run `npm run archive -- <meeting-id>`.
-10. Run `npm run status -- <meeting-id>` one last time and confirm the meeting is
+6. Ensure `artifacts/<meeting-id>/transcript.zh-TW.txt` exists and matches the current transcript.
+   - Read `artifacts/<meeting-id>/transcript.json` as the source of truth.
+   - Translate English or mixed-language transcript content into natural Traditional Chinese.
+   - Lightly polish for readability: fix obvious transcription errors, add paragraph breaks, normalize punctuation, and add speaker labels when inferable.
+   - Preserve the meeting content and order. Do not summarize, omit major sections, or invent details.
+   - This file is the full transcript shown on the meeting page, so make it complete enough for someone to read after expanding the transcript section.
+   - If the transcript already has a current polished zh-TW file and the audio/transcript has not changed, keep it.
+7. Run `npm run status -- <meeting-id>` again.
+8. If `nextAction` is `optimize-photos`, run `npm run optimize-photos -- <meeting-id>`.
+9. Run `npm run status -- <meeting-id>` again.
+10. If `nextAction` is `archive`, run `npm run archive -- <meeting-id>`.
+11. After archive, copy or confirm `transcript.zh-TW.txt` is also present in `published/<meeting-id>/` when a published bundle is generated.
+12. Run `npm run status -- <meeting-id>` one last time and confirm the meeting is
    now `done`, then report the page path.
 
 ## Output rules
@@ -62,14 +71,26 @@ the summary step by itself.
 - Do not create one summary per audio file or per split segment; the meeting
   always ends with one combined transcript and one combined summary.
 - Convert every photo found under `upload/<meeting-id>/photos` into a cached webp derivative before archiving.
-- Only archive after `summary.json` and the webp derivatives exist.
+- Only archive after `summary.json`, `transcript.zh-TW.txt`, and the webp derivatives exist.
+- The meeting page should display the polished `transcript.zh-TW.txt` as the expandable full transcript; do not leave the page using raw English or mixed-language `transcript.json.text` when a polished zh-TW transcript can be produced.
+
+## Polished transcript rules
+
+- Write `artifacts/<meeting-id>/transcript.zh-TW.txt` for every completed meeting.
+- The transcript must be Traditional Chinese, lightly edited, and easy to read.
+- Preserve the original sequence and substance. This is a readable full transcript, not another summary.
+- Use paragraph breaks generously and speaker labels when they are clear from context.
+- Translate English source material naturally into zh-TW; normalize simplified Chinese into zh-TW.
+- Remove filler only when it is clearly transcription noise and does not change meaning.
+- Prefer complete coverage over elegance; do not compress long sections into a short recap.
 
 ## Summary writing rules
 
 - Translate non-zh-TW source material into natural Traditional Chinese.
 - Keep the writing edited, concrete, and useful for someone reopening the page later.
 - Prefer empty arrays or omitted optional fields over invented facts.
-- Focus on agenda, highlights, decisions, action items, and memorable quotes.
+- Focus on agenda, highlights, narrative context, and memorable quotes.
+- Do not create separate decisions or action item sections unless the user explicitly asks for them.
 
 ## Useful commands
 

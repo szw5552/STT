@@ -10,8 +10,6 @@
     "agenda",
     "attendees",
     "highlights",
-    "decisions",
-    "actionItems",
     "quotes",
     "closingNote"
   ],
@@ -22,70 +20,125 @@
     "meeting": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "language", "generatedAt", "sourceLanguages"],
+      "required": [
+        "id",
+        "title",
+        "language",
+        "generatedAt",
+        "sourceLanguages"
+      ],
       "properties": {
-        "id": { "type": "string" },
-        "title": { "type": "string" },
-        "date": { "type": "string" },
-        "location": { "type": "string" },
-        "language": { "const": "zh-TW" },
-        "generatedAt": { "type": "string", "format": "date-time" },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "language": {
+          "const": "zh-TW"
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
         "sourceLanguages": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "hero": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kicker", "headline", "dek"],
+      "required": [
+        "kicker",
+        "headline",
+        "dek"
+      ],
       "properties": {
-        "kicker": { "type": "string" },
-        "headline": { "type": "string" },
-        "dek": { "type": "string" }
+        "kicker": {
+          "type": "string"
+        },
+        "headline": {
+          "type": "string"
+        },
+        "dek": {
+          "type": "string"
+        }
       }
     },
     "agenda": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "attendees": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "highlights": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title", "body"],
+        "required": [
+          "title",
+          "body"
+        ],
         "properties": {
-          "title": { "type": "string" },
-          "body": { "type": "string" }
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
         }
       }
     },
     "decisions": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "actionItems": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["owner", "task"],
+        "required": [
+          "owner",
+          "task"
+        ],
         "properties": {
-          "owner": { "type": "string" },
-          "task": { "type": "string" },
-          "due": { "type": "string" }
+          "owner": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          },
+          "due": {
+            "type": "string"
+          }
         }
       }
     },
     "quotes": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "closingNote": {
       "type": "string"

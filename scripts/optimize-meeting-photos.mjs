@@ -88,6 +88,55 @@ async function writeWebpFromHeicViaSips(sourcePath, outputPath) {
   }
 }
 
+async function writeWebpFromHeicViaFfmpeg(sourcePath, outputPath) {
+  const tempDir = await fs.mkdtemp(path.join(tmpdir(), "stt-heic-"));
+  const tempPngPath = path.join(tempDir, `${path.parse(sourcePath).name}.png`);
+
+  try {
+    await execFileAsync("ffmpeg", [
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-y",
+      "-i",
+      sourcePath,
+      "-frames:v",
+      "1",
+      "-update",
+      "1",
+      tempPngPath,
+    ]);
+    return await writeWebp(tempPngPath, outputPath);
+  } catch (error) {
+    const stderr =
+      error !== null &&
+      typeof error === "object" &&
+      "stderr" in error &&
+      typeof error.stderr === "string"
+        ? error.stderr.trim()
+        : "";
+    const reason = stderr || (error instanceof Error ? error.message : String(error));
+    throw new Error(`HEIC ffmpeg 備援轉檔失敗：${reason}`);
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
+async function writeWebpFromHeic(sourcePath, outputPath) {
+  try {
+    return await writeWebpFromHeicViaSips(sourcePath, outputPath);
+  } catch (sipsError) {
+    try {
+      return await writeWebpFromHeicViaFfmpeg(sourcePath, outputPath);
+    } catch (ffmpegError) {
+      const sipsReason = sipsError instanceof Error ? sipsError.message : String(sipsError);
+      const ffmpegReason =
+        ffmpegError instanceof Error ? ffmpegError.message : String(ffmpegError);
+      throw new Error(`${sipsReason}; ${ffmpegReason}`);
+    }
+  }
+}
+
 async function optimizeMeetingPhotos(meetingId) {
   const directories = getMeetingDirectories(meetingId);
   const { sourceFiles, sourceLocation } = await buildSourcePhotoFiles(meetingId);
@@ -121,7 +170,7 @@ async function optimizeMeetingPhotos(meetingId) {
           throw error;
         }
 
-        result = await writeWebpFromHeicViaSips(sourceFile.filePath, outputPath);
+        result = await writeWebpFromHeic(sourceFile.filePath, outputPath);
       }
 
       if (typeof result.width !== "number" || typeof result.height !== "number") {

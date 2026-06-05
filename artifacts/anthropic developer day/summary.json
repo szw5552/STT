@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "meeting": {
+    "id": "anthropic developer day",
+    "title": "Anthropic Developer Day Taiwan",
+    "date": "2026-06-05",
+    "location": "Taiwan AI Academy",
+    "language": "zh-TW",
+    "generatedAt": "2026-06-05T19:31:00+08:00",
+    "sourceLanguages": [
+      "en",
+      "zh-TW",
+      "zh-Hant"
+    ]
+  },
+  "hero": {
+    "kicker": "Anthropic 首次台灣開發者活動",
+    "headline": "Claude Code、MCP 與台灣 AI 韌性的同場對話",
+    "dek": "這場活動不只是 Anthropic 產品展示，而是一場把台灣供應鏈、frontier AI 安全、企業導入、資安防禦、開發者工具與在地資料應用全部串起來的長談。從 Ben 與數發部的 fireside chat，到資安 panel，再到 EasyFunnel、Spectra 與 Twinkle Hub 的 demo，主軸都指向同一件事：AI 正從模型變成可操作世界的基礎設施，而台灣既是基礎設施的製造者，也是治理與應用的第一線。"
+  },
+  "agenda": [
+    "開場介紹 Anthropic、Claude Code、MCP 與台灣開發者活動的背景，並說明 Ben 首次正式訪台的意義。",
+    "透過 Claude 產生的台灣與講者介紹，引出 human-in-the-loop、資料來源與模型對公開網路內容的理解能力。",
+    "Ben 與數發部代表進行 fireside chat，討論台灣供應鏈、Anthropic 是否進入硬體、Bluetooth API、Claude Buddy 與硬體設計能力。",
+    "討論企業導入路線：模型蒸餾、on-premise、MCP、skills、跨區推論、雲端合作夥伴與敏感資料治理。",
+    "深入 AI 安全議題：agent 能執行多步驟任務後，模型發布前測試、bio-uplift、資安能力與 Project Glasswing 的受控釋出如何影響產品策略。",
+    "討論 Claude Code 與 vibe coding 是否真正民主化軟體開發，以及 AI 對初階工程師、資深工程師與未來就業市場的衝擊。",
+    "回應現場提問，涵蓋不要在能力浪潮前建錯產品、API proxy、MCP registry、可信任 agent 評估、金融合規、台語與低資源語言、API 濫用與轉運站問題。",
+    "資安 panel 聚焦 AI-native cyber threats：critical infrastructure、供應鏈 SME、攻防態勢、AI-ready 組織、人才培養與民主國家的共同防線。",
+    "高見龍展示 EasyFunnel 與 Spectra，說明 Claude Code 如何支援實際營收產品、離線驗票、規格驅動開發與工程師自己的 harness。",
+    "黃亮群展示 Twinkle Hub，說明台灣 open data、MCP、skills 與 Taiwan tools 如何成為開發者打造在地 AI app 的資料護城河。"
+  ],
+  "attendees": [
+    "Ben（Anthropic 共同創辦人／技術團隊成員，參與 Claude Code 與 MCP 相關工作）",
+    "何伊莎貝爾（數位發展部次長，fireside chat 主持與提問者）",
+    "AI Academy、數位發展部、政府與公共政策相關代表",
+    "資安 panel 與談人：政府、學界、產業與國際 AI 安全相關代表",
+    "高見龍（Five Times Campus 創辦人、WebConf Taiwan 創辦人、Anthropic Community Leader Taipei）",
+    "黃亮群（Twinkle AI 社群創辦人、AI 工程總監、Twinkle Hub 展示者）",
+    "台灣開發者、企業導入者、資安社群、AI 社群與活動現場觀眾"
+  ],
+  "highlights": [
+    {
+      "title": "台灣不是 AI 供應鏈的背景，而是 frontier AI 的共同前提",
+      "body": "Ben 在開場與 fireside chat 中多次把台灣放在 Anthropic 的核心脈絡裡：Claude 所依賴的運算能力，建立在台灣半導體、晶片、伺服器與整體供應鏈之上。數發部也用台灣生產全球絕大多數 AI server、同時承受高度資安攻擊壓力的現實，提醒這不是單純的商業合作，而是民主陣營能否安全發展 AI 的基礎設施問題。這也讓『Anthropic 來台灣』不只是社群活動，而是產品能力、政策治理與供應鏈韌性的交會點。"
+    },
+    {
+      "title": "硬體不是 Anthropic 立即要做的產品，但會成為 Claude 能力延伸的場域",
+      "body": "談到 Bluetooth API 與 Claude Buddy 時，Ben 將它類比為 Claude Code 的策略：Anthropic 不一定自己下場做完整硬體，而是先做出展示模型能力的入口，讓生態系看見 Claude 可以從軟體世界進一步碰到硬體介面、設計、製造與測試流程。這對台灣特別有意義，因為台灣不只做晶片，也做伺服器、ODM/OEM、週邊與製造流程；若 Claude 能更懂硬體規格與 design-for-manufacturing，台灣廠商就可能在 agentic hardware workflow 裡成為早期實驗者。"
+    },
+    {
+      "title": "MCP 與 skills 改變企業對『客製模型』的想像",
+      "body": "現場把模型蒸餾與 MCP 做成一組清楚的取捨：蒸餾或 open-weight model 帶來離線與自主控制，但 frontier model 更新很快，企業可能很快落後；MCP 與 skills 則讓企業保留自己的系統、資料與工具，同時把能力接到最新模型。Ben 的建議是，多數情境不必先改模型權重，而是把內部知識、流程、工具、API 與權限包成可攜的 MCP 或 skills。真正需要蒸餾的，多半是 air-gapped、潛艦、離線設備或完全不能連外的特殊部署。"
+    },
+    {
+      "title": "企業合規問題不只是一句『資料不能出境』就結束",
+      "body": "金融與政府導入 AI 時最常遇到資料落地、個資與資安規範。Ben 提到 cross-region inference、data at rest 留在本地、以及透過 AWS、Azure、GCP 等雲端夥伴提供合規架構的可能性；同時也指出模型本身已能協助辨識與移除部分個資，讓企業在送出推論前先做資料清理。這段討論的重點是：台灣企業不一定只能在『完全不用 frontier model』與『把所有資料送出去』之間二選一，而是可以設計中介層、proxy、權限與資料最小化流程。"
+    },
+    {
+      "title": "Agent 安全從回答問題，變成控制工具與外部系統的風險治理",
+      "body": "當 Claude 從聊天模型變成能使用工具、記憶、執行多步驟任務的 agent，安全問題也從『回答是否有偏誤』擴大成『模型是否能在真實世界造成後果』。Ben 以 Anthropic 的 bio-uplift 測試說明：在某次模型發布前，一名受測者在 Claude 協助下出現非常大的能力提升，足以讓團隊延後發布、補強 safeguards。這個例子讓現場看到 Anthropic 所謂安全發布不是口號，而是產品節奏會真的被安全訊號改變。"
+    },
+    {
+      "title": "Mythos 與 Project Glasswing 展示高能力模型的受控釋出模式",
+      "body": "在資安與生物雙用途能力上，Ben 說 Anthropic 感受到兩邊壓力：能力若釋出太快，可能被濫用；能力若壓太久，又會阻礙防禦者改善資安、研究者做藥物探索或企業修補漏洞。因此 Mythos 這類高能力模型先透過 Project Glasswing 交給少數可信任公司使用，重點不是把能力永遠封住，而是在 safeguards、監控、存取控制與使用者篩選更成熟後，再逐步擴大有益用途。"
+    },
+    {
+      "title": "Claude Code 的民主化效果是階段性的：先放大專家，再降低門檻",
+      "body": "數發部提問指出，vibe coding 可能讓資深工程師變得近乎超人，但初學者仍不懂如何驗證 AI 產物。Ben 回應，早期 coding agent 確實比較像專家增幅器；但模型能力提升後，非工程背景者也可以像聘請工程師一樣，把需求交給 Claude 並檢查結果是否可用。這不代表工程師立即不重要，而是工程師的價值會從逐行寫程式，移到定義問題、驗證行為、建構 harness、處理安全與產品判斷。"
+    },
+    {
+      "title": "就業衝擊不是今天的失業率能看出來，但需要現在準備",
+      "body": "Ben 對 AI job displacement 的回答相當直接：目前經濟指標還看不出大規模失業，這與 Anthropic 的預測並不矛盾，因為模型還沒有能完成一個人工作的全部流程；真正的轉折會發生在模型能做完完整工作之後。他認為知識工作可能先受到衝擊，之後若 robotics control 被解決，實體工作也會受到影響。正因為壞情境機率不是零，政府應該在還有時間時規劃訓練、轉型、稅制與社會安全網，而台灣因為政府與產業互動密切，有機會更快試行。"
+    },
+    {
+      "title": "AI race 的討論被拉回民主價值與出口管制",
+      "body": "Ben 明確表示，若中國或威權政體在 AI 競賽中取得決定性優勢，對人權、自由與台灣資安都會是壞結果。他也強調，即使民主國家先達到 super intelligence，其他國家仍會追趕，因此出口管制、供應鏈安全與台灣企業配合先進運算限制，是延緩威權濫用能力的重要手段。這段談話把 AI dominance 從國家競爭轉成一個更具體的問題：誰能取得運算能力、誰能部署高能力模型、誰又能約束它們的使用。"
+    },
+    {
+      "title": "可信任 agent 沒有單一 benchmark，必須結合內部使用與外部審查",
+      "body": "現場問到 Anthropic 如何判斷一個 agent assistant 值得部署。Ben 承認 evaluation 是目前最難的問題之一：公司內部會有 benchmark，也會讓 Anthropic 員工在發布前大量使用模型、回報問題；外部則仰賴 UK AI Safety Institute、US AISI、METR／Hayes Labs 等第三方測試。對企業來說，這意味著不能只看模型跑分，還要看自己的工作流中是否有審批、回滾、權限、稽核與紅隊測試。"
+    },
+    {
+      "title": "台灣資安優先順序：critical infrastructure 與供應鏈 SME",
+      "body": "資安 panel 把台灣面臨的 AI-native threat 描述得很具體：電力、醫院、通訊、政府系統等 critical infrastructure 必須優先保護；但同樣脆弱的是供應鏈裡的中小企業。大型公司如 TSMC 或 Foxconn 有較完整資安團隊，小型 PCB、材料、零組件公司卻常缺人、缺預算、缺工具，一旦被攻擊就會影響整條供應鏈。政府與產業因此需要把資安解決方案包成 SME 負擔得起、部署得動、能快速更新的形式。"
+    },
+    {
+      "title": "AI 可能偏向攻擊者，也可能讓防禦者翻盤，關鍵在準備速度",
+      "body": "panel 中有人認為現階段 AI 比較偏向攻擊者，因為攻擊方可以更快嘗試、生成、協調；也有人指出 AI 本身沒有偏好，誰有意圖與準備就會被放大。討論最後收斂到一個共識：傳統防禦假設不再穩固，修漏洞不能再以週為單位，事件應變也不能只靠人力排隊處理。台灣若要讓 AI 偏向防禦方，就必須讓組織、教育、SOC、產品設計與跨部門協作都變得 AI-ready。"
+    },
+    {
+      "title": "高見龍的 EasyFunnel 證明 Claude Code 已能支撐真實產品",
+      "body": "高見龍分享他因為辦研討會需要客製化售票系統，最後用 Claude Code 在下班與週末時間做出 EasyFunnel。這不是玩具：系統已有會員、訂單、金流與營收，並處理驗票、離線簽到、載具、手機末三碼查票、識別證與活動現場流程。他也展示 Spectra，一個規格驅動開發工具，用來把需求、設計與測試交給 AI 執行。這段 demo 的核心訊息是：Claude Code 真正改變的不是某個 UI，而是工程師組織自己工作的方式。"
+    },
+    {
+      "title": "Twinkle Hub 把台灣 open data 變成 agent 可用的產品原料",
+      "body": "黃亮群從『大家都會用 Claude Code 做 app，差異在哪裡』談起，指出新的護城河會回到資料。Twinkle Hub 把五萬多個台灣 open data、資料集分群、政府資料授權、MCP、skills 與 Taiwan tools 整合起來，讓開發者可以用自然語言做出在地應用：合法民宿查詢、全國實價登錄 QA、台中交通事故熱點、金融與失業率分析、國考題庫語意搜尋等。它不是另一個 agent，而是讓各種 agent 更懂台灣的資料底座。"
+    },
+    {
+      "title": "低資源語言與文化資料被視為文化主權的一部分",
+      "body": "現場提到台語、客語與原住民族語等低資源語言。Ben 認為，若文化團體與政府能把語料以合適授權整理並公開，frontier model 才更有機會學到並保存這些語言；如果資料沒有被收集，未來可能更難補回來。數發部也提醒 Claude bot 必須遵守 robots.txt 與網路規範，這讓文化資料公開與資料控制之間的張力被說清楚：社群既要讓模型看見，也要保有授權與使用邊界。"
+    }
+  ],
+  "decisions": [
+    "Anthropic 會把台灣視為 AI 供應鏈、資安韌性與民主合作的重要夥伴，並持續透過日本辦公室、活動與合作案增加與台灣的互動。",
+    "Anthropic 暫時沒有自行製造硬體的明確需求，但會持續讓 Claude 更能理解硬體介面、設計、製造與台灣硬體生態系的工作流。",
+    "企業導入 Claude 時，預設優先評估 MCP、skills、API proxy、workload identity federation、跨區推論與雲端合規架構；只有在 air-gapped 或完全離線等特殊場景，才把蒸餾或 open-weight 模型視為主要路線。",
+    "高風險模型能力的發布應採受控、分階段、可觀察的方式，先讓可信任防禦者與研究者取得有益能力，再隨 safeguards 成熟擴大使用。",
+    "台灣 AI 資安策略需要同時保護 critical infrastructure 與供應鏈 SME，不能只把資源集中在大型企業。",
+    "AI-era cybersecurity 教育應擴大到全民、非技術人員與學生，並透過資安競賽、演練與工具熟悉度訓練，讓未來人才自然具備 AI 協作能力。",
+    "在地 open data、低資源語言與文化資料若要進入 AI 時代，必須兼顧公開可取用、授權清楚、社群控制與資料品質。"
+  ],
+  "actionItems": [
+    {
+      "owner": "Anthropic 與台灣政府合作窗口",
+      "task": "規劃更多台灣企業、政府與開發者可參與的 Claude、MCP、AI 安全與資安能力交流，讓合作不只停留在單次活動。"
+    },
+    {
+      "owner": "台灣企業 AI 導入團隊",
+      "task": "盤點內部資料與工具，優先設計 MCP／skills／proxy／權限控管架構，再決定是否需要微調、蒸餾或 on-premise 部署。"
+    },
+    {
+      "owner": "金融、政府與高合規產業",
+      "task": "針對資料落地、個資遮罩、跨區推論與 API key 管理建立標準導入樣板，避免每個單位各自從零摸索。"
+    },
+    {
+      "owner": "資安主管與 SOC 團隊",
+      "task": "重新檢查漏洞修補、事件應變與監控流程的時間假設，將 AI 輔助偵測、分類、修補建議與自動化回應納入演練。"
+    },
+    {
+      "owner": "政府與產業協會",
+      "task": "為供應鏈 SME 打包可負擔的資安方案，尤其是 PCB、材料、零組件與中小型製造商，並建立快速部署與更新機制。"
+    },
+    {
+      "owner": "教育機構與社群",
+      "task": "把 AI 工具使用、資安競賽、prompt／spec 撰寫、結果驗證與風險判斷納入課程，讓學生與非工程背景者也能安全使用 coding agent。"
+    },
+    {
+      "owner": "開發者與產品團隊",
+      "task": "建立自己的 AI 開發 harness：需求規格、測試、權限、rollback、離線情境與使用者驗證，不要只依賴模型一次性輸出。"
+    },
+    {
+      "owner": "在地資料與開源社群",
+      "task": "持續整理可授權、可查詢、可被 MCP 與 skills 使用的台灣 open data，並為台語、客語、原住民族語等語料建立清楚的公開與授權方式。"
+    },
+    {
+      "owner": "活動與社群主辦單位",
+      "task": "把 EasyFunnel、Spectra、Twinkle Hub 這類實際案例整理成後續 workshop 或教學，讓開發者看到 Claude Code 不只會 demo，也能進入營運流程。"
+    }
+  ],
+  "quotes": [
+    "如果沒有台灣，就沒有 Anthropic；我們的 AI 建立在台灣的半導體、晶片與伺服器之上。",
+    "Claude Code 的目的不是只做一個工具，而是展示 Claude 作為 agentic coder 的能力，讓整個產業往 agentic AI 移動。",
+    "現在有長上下文、MCP 與 skills，很多事可以不用改模型權重就完成，而且能隨著下一個 frontier model 立刻升級。",
+    "真正需要蒸餾或 open-weight 模型的，是 air-gapped、離線或設備端這類特殊情境。",
+    "當單一測試個案出現巨大 uplift 時，即使只是 n=1，也足以讓我們延後發布並重新檢查 safeguards。",
+    "今天的差距可能只是能力暫時還不夠；當模型更好，非工程背景者也會更能創造軟體。",
+    "目前失業率看不出變化，並不代表未來不會有劇烈轉折；真正的問題是 AI 何時能做完一個人的完整工作。",
+    "如果不重視安全，民主社會一旦發生災難性事件，反而可能要求停止一切創新。",
+    "台灣常常是第一個看見 adversarial attacks 的地方，這本身就是民主夥伴非常重要的資訊。",
+    "Claude Code 讓 app 變容易之後，真正的護城河會回到資料。"
+  ],
+  "closingNote": "這場活動值得被記住的地方，是它沒有把 AI 簡化成某個模型版本或某個 coding demo。Ben 與數發部的對談把 Claude 放進台灣供應鏈、民主治理、出口管制、就業轉型與高風險能力發布的框架裡；資安 panel 則提醒台灣正在面對的是 AI-native threat，不只大型公司需要防禦，供應鏈裡每一家 SME、每一個公共服務與每一個使用者都可能成為攻擊面。後半段的 demo 又把討論拉回開發者手上：EasyFunnel 說明 Claude Code 已能幫工程師做出真實產品，Spectra 說明規格、測試與 harness 會成為 AI 開發的新工作法，Twinkle Hub 則說明台灣在地資料如何成為 agent 懂台灣、做出台灣產品的關鍵。對會後重讀這頁的人來說，這場 Developer Day 的核心不是『AI 會不會改變世界』，而是更具體的三個問題：台灣要如何把自己從硬體供應鏈延伸成 AI 應用與治理的共同設計者；企業要如何用 MCP、skills 與安全架構接住 frontier model；以及民主社會要如何在不犧牲安全的前提下，把高能力 AI 的好處交到防禦者、創作者與公共利益手中。"
+}

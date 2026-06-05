@@ -1,0 +1,255 @@
+【Anthropic Developer Day Taiwan｜潤飾版完整逐字稿】
+
+主持人：Ben 不只是 Anthropic 的共同創辦人，也是多個重要產品與技術方向背後的核心工程成員。這也是他第一次正式來到台灣。接下來，讓我們一起歡迎 Ben 上台。
+
+Ben：謝謝大家。我是 Ben，來自 Anthropic 的工程團隊。過去這段時間，我參與了 Claude Code 與 Model Context Protocol，也就是 MCP 的開發。我的個人目標，是確保 AI 能為人類帶來更好的未來。
+
+今天很高興來到台灣 AI Academy。台灣在 AI、安全與民主價值上的角色非常特別，也與 Anthropic 很重視的方向高度契合。Anthropic 之所以在台灣舉辦這場活動，是因為我們相信，台灣在全球 AI 發展中佔有非常重要的位置。我們也期待持續擴大與台灣的合作與投資。
+
+主持人：接下來邀請數位發展部次長何伊莎貝爾上台。今天的 fireside chat，Ben 與次長會一起討論 frontier AI、台美 AI 策略合作，以及台灣在這個生態系裡的角色。請大家再給他們一輪掌聲。
+
+何伊莎貝爾：謝謝大家。我們先看一下投影片。Ben 昨天問我有沒有用 Claude 做設計，我想給他看成果。這是 Claude 做出的 2025 台灣 dashboard。你可以看到，上面提到 GPS、PLA aircraft incursion、cyber attacks，這些數字大家可能都很熟悉。台灣生產全球超過九成的 AI server，而且在這座小島上，有超過兩千座三千公尺以上的高山。這是一個很短的台灣介紹。
+
+我也問 Claude 關於 Ben 的介紹，結果相當正確。我們有請 Ben 本人確認，實踐 human-in-the-loop 原則。Claude 說，Ben 是 Anthropic 的共同創辦人，Anthropic 是 Claude 背後的 AI safety company；他也是 GPT-3 架構的重要參與者之一。加入 Anthropic 前，他在 OpenAI 擔任技術成員，參與基礎設施、效率與安全相關工作。後來他與其他同事離開 OpenAI 創立 Anthropic，因為他們覺得安全沒有被放在足夠優先的位置。在 Anthropic，他深度參與產品工程，尤其是 Claude Code 這個 agentic coding tool。更大的脈絡是，Ben 曾公開表示，他認為大約 2028 年前後出現某種 super intelligence 的機率約為 50%。
+
+我也問 Claude 關於我自己的介紹，算是做一個 benchmark。我覺得也蠻正確。後來我請同事查，想知道 Claude 為什麼知道這些，結果發現 Claude bot 非常常造訪我們數發部的網站。Claude 很愛數發部。
+
+Ben：我們也愛你們。
+
+何伊莎貝爾：那我們接下來切成中文。Ben，歡迎來台灣。你是 Anthropic 的共同創辦人，也參與過 GPT-3。台灣在 AI server 與供應鏈上扮演很重要的角色。你來台灣大約 48 小時了，有什麼感覺？
+
+Ben：我覺得台灣非常特別。如果沒有台灣，就沒有 Anthropic。因為我們的 AI 建立在台灣的半導體、晶片、伺服器與整個供應鏈之上。所以我認為台灣與 Anthropic 持續合作非常重要。
+
+何伊莎貝爾：那 Anthropic 什麼時候要在台灣開公司？沒關係，這題可以跳過。
+
+Ben：我們目前在日本有辦公室，也很期待持續從那裡派更多同事經常來台灣。
+
+何伊莎貝爾：很好，下次也請記得給我電話。第一題我想從硬體供應鏈開始。Anthropic 最近 open source 了 Bluetooth API，也有 Claude desktop buddy，讓 maker 可以打造與 Claude 互動的實體硬體裝置。這是一個小但很有趣的訊號，好像 Anthropic 開始思考軟體之外的世界。台灣生產全球大多數 AI server，也有非常完整的硬體生態系。台灣不只做晶片，而是做整個 AI 運行所需的 physical code stack。我的問題很直接：Bluetooth API 與 Claude Buddy 只是給 hobbyist 玩的實驗，還是 Anthropic 開始有真正的硬體策略？如果有，對你來說，Anthropic 與台灣硬體生態系之間有意義的合作會長什麼樣子？
+
+Ben：這是一個很好的問題。我先往前退一步說。Claude Code 之所以被做出來，是因為我們已經有很強的開發者生態系。我們有 API，也有 Cursor、GitHub 這些合作夥伴在做 coding agent。但我們覺得 Claude 作為 agentic coder 的能力沒有被完全展現出來，所以我們做了 Claude Code 來展示這種能力。這件事也推動整個產業往 agentic AI 前進。
+
+我想硬體領域可能會看到類似的事情。我們做 Bluetooth API，是為了展示 Claude 不只能在軟體世界裡操作，也能與硬體介面互動，甚至處理硬體設計、design for manufacturing 等事情。Claude 在這些領域的能力還很早期，所以我們希望開發者與生態系夥伴開始實驗，看看能力在哪裡、還缺什麼，並給我們回饋。我們目前不認為需要自己做硬體，但我們會與台灣及其他地方的許多公司密切合作，推進 Claude 在這些領域的能力。
+
+何伊莎貝爾：如果大家用 Claude 做出什麼東西，下次就可以拿給 Ben 看。下一題談企業導入。許多台灣與全球企業不一定願意把敏感資料送到雲端模型，所以他們會看 distillation，把大型 frontier model 的知識壓縮到小模型，放在 on-premise 自己控制。但另一條路是 MCP，用開放框架把 Claude 接到企業系統，資料不一定離開自己的控制範圍。這兩種哲學很不一樣。Distillation 給你獨立性，但當 Claude 進步時，你會逐漸失去 frontier capability；MCP 讓你保持連接 frontier model，但仍依賴 Anthropic infrastructure。你會怎麼建議企業思考這個 trade-off？有沒有什麼場景，即使從 Anthropic 的角度，你也會說 distillation 真的是正確答案？
+
+Ben：我認為 OpenAI 過去有 fine-tuning API，現在逐漸移除，有其原因。Anthropic 也長期思考過 fine-tuning。但現在模型有一百萬 token context，再加上 skills 與 MCP，開發者可以在不改模型權重的情況下做非常多事情。MCP 是 Anthropic 發展後交給 AI Foundation 維護的 open source project。這有很多好處。
+
+你不需要每次 frontier model 更新就重新訓練模型，而 frontier model 更新越來越頻繁，有時每個月都有新能力。相反地，你可以把已經開發好的 MCP 與 skills 接到下一個模型上。這讓你更敏捷，也可以測試 Anthropic、OpenAI、Google 或任何你想用的模型。這些標準已被主要實驗室採用，所以可攜性很高。
+
+因此，想要 distill 模型的理由已經改變。當然，某些場景確實需要 open-weight 或 distillation，例如完全 air-gapped、離線部署，或像潛艦這種不可能連線的環境。那時只能用在裝置上執行的模型。但對多數人而言，skills 與 MCP 會更合理。很多人也沒有意識到，有些看似必須在國內運算的合規要求，可以透過 cross-region inference 解決，也就是 inference 可能在海外執行，但 data at rest 永遠儲存在本國。透過 Azure、GCP、AWS 三大雲端夥伴，他們都很期待協助台灣企業與政府組織更快採用新技術。
+
+何伊莎貝爾：Claude 最早是模型，但 Anthropic 現在提供 agents、memory、tools 與更複雜的 service layers。這些都是 Claude 在世界中採取行動的新方式，有時甚至相當自主。當模型只是回答問題時，安全邊界跟它執行多步驟、接外部系統、跨 session 記憶事情時很不一樣。你能不能分享一個具體時刻，某個新能力在 Anthropic 內部引發嚴重安全警訊？是誰提出？團隊怎麼討論？最後怎麼解決？這個經驗有沒有改變 Anthropic 評估下一個能力的方式？
+
+Ben：我有一個很好的例子。我們在準備發布 Opus 4 附近的某個模型時，做 bio-uplift analysis。這是我們 responsible scaling policy 的一部分，每個模型發布前都會做。測試方式是請人嘗試建構生物武器，有些人只能用 Google search，有些人可以使用 Claude。我們要看模型是否會顯著加速建構生物武器的能力。
+
+通常這種分析會看整體統計數字，但那一次在某個週末，有一位受測者得到了非常巨大的 uplift，好像是 2.5 倍。當 uplift 大到這種程度，即使只有 n=1，統計訊號也足以令人擔心。因此我們延後發布，直到確認 safeguards 足夠到位，才覺得可以繼續。
+
+這件事說明 pre-deployment testing 非常關鍵。你也可以看 Mythos 的發布方式，我們非常小心，只先交給 Project Glasswing 中極少數公司使用。過去一個月，我們主要都在改善 safeguards，讓未來能把同樣能力提供給更多人。這是一種 dual-use technology，可以用於善，也可以用於惡。把它壓著不放，也同時擋住防禦者改善 cybersecurity posture、研究者做 drug discovery 與救命應用。因此我們很清楚延後發布的重量，也會盡快釋出，但前提是 safeguards 足夠。
+
+何伊莎貝爾：你帶領團隊做出 Claude Code，這個工具讓 vibe coding 對很多人變得真實。在台灣，我加入政府前在 AI Academy 訓練過三萬多位工程師與管理者，核心使命是讓 AI 不只屬於少數人。但我擔心的是，像 Claude Code 這樣的工具降低地板，讓任何人都可以開始建東西；同時也可能拉高天花板。懂的人用 Claude Code 會變得近乎超人，不懂的人仍不知道 Claude 產出的東西到底能不能用。這到底是在民主化軟體開發，縮小專家與一般人的差距，還是創造新的 divide，讓懂得指揮 AI 的人更往前？
+
+Ben：這是 Anthropic 很重視的問題。我們要怎麼把模型能力交給更多人，讓每個人都能改善自己的生活？以 software engineering 來說，一年前只有有經驗的開發者能從這些工具得到價值。今天模型已經好到在某些 use cases 裡，像是聘請一位 software engineer 與你一起工作。若你聘請一個人，你不一定需要完全理解他每一行怎麼寫，重點是東西是否可用。當然，聘對人很難，但 Claude 提供比較一致的體驗。
+
+所以今天越來越多人能在沒有技術背景的情況下創造 software artifacts，這非常令人興奮。它讓非技術背景的人也能開始創立以軟體為核心的公司。從能力發展看，模型會逐漸超越多數 software engineers。以 Mythos 的 cybersecurity capabilities 為例，今天大概相當於全球前兩千名 cybersecurity experts 的能力，這種能力常常不是有錢就能取得。我們希望所有安全的軟體用途，無論是為社群做工具、加速臨床試驗，或其他有益事情，都能讓任何人安全取得。
+
+我認為你今天看到的 divide 很大程度是暫時的能力問題。隨著模型更好，差距會消失。接下來更大的問題是，那些原本做這些工作的 software engineers 怎麼辦？這是 Anthropic 必須與各國政府一起面對的問題。
+
+何伊莎貝爾：這也正是下一題。關於 AI 與工作有很多公開辯論。Jensen Huang 說，會用 AI 的人會取代不會用 AI 的人，整體會是正向、更多工作、更多 empowerment。你們 CEO Dario 去年說得更悲觀，警告 AI 可能消滅大量 entry-level white-collar jobs，把失業率推高，而且會非常痛苦，甚至提出 AI 公司 progressive taxation。但最近他好像又比較緩和，說 automation 可能擴大人類能做的工作。你自己怎麼看？工作衝擊會像 Dario 原本警告的那麼痛嗎？台灣現在有 AI Academy 與政府的 AI training programs，我們做的是對的嗎，還是在訓練人們做未來不存在的工作？
+
+Ben：這很難回答。簡短說，我們都在盡力預測，但沒有人能確定。我心裡的想法是，如果預設路徑有一定機率會好，那我們不需要花最多力氣準備好情境；我們應該把力氣放在較小但嚴重的壞情境上。假設 rapid job displacement 有 20% 機率，那就是現在必須投入大量準備的事情。
+
+至於會不會發生，我認為不是 if，而是 when。我強烈相信，未來幾年內出現 superhuman AI capabilities 與 software-only singularity 的機率可能有 50%。如果這是真的，之後 robotics 也可能很快被解決，因為硬體其實已經不錯，限制在於控制硬體的能力。這樣就不難想像失業可能快速發生，先是知識工作，後來是實體勞動。
+
+那我們該怎麼辦？我個人認為，沒有政府介入，這個問題很難解決。與數發部及台灣政府合作，我認為台灣可以比世界上某些政府更快行動。台灣是民主國家，也支持自由，這與 Anthropic 的價值非常一致。越能一起 pilot 未來可能的樣子越好。
+
+我也承認，這些預測聽起來可能很驚人，因為今天的經濟指標沒有任何失業跡象，失業率沒有明顯變動。但這其實符合我們的預測，因為真正造成失業的條件，是 AI 能做完一個人能做的所有工作，而我們還沒到那個能力。不過模型訓練進步沒有放慢跡象，所以即使今天沒有明顯指標，我們仍認為前方會很顛簸。有點像 2008 年金融危機，如果你沒有非常仔細看，也很難事前預測。
+
+何伊莎貝爾：我相信數發部與 Anthropic 的合作，對全世界與人類都很重要。我們會非常努力，也相信你們會。
+
+接著回到白宮。白宮簽署了關於 AI innovation and security 的 executive order，明確以 America First 的框架維持全球 AI dominance。台灣位於這個地緣政治核心：我們製造晶片與伺服器，也在建立自己的 AI governance。作為 frontier AI company，在這個新框架下，Anthropic 如何看待對台灣這樣盟友的責任？American AI dominance 是否容得下與民主世界其他夥伴真正合作？
+
+Ben：我的希望是，即使美國的 AI capabilities 位於 frontier，也能把利益帶給其他國家。把這些能力分享給台灣政府與台灣公司非常重要。從經驗看，美國政府投資台灣公司，協助在 Arizona、Texas 等地建立 fabs 與製造能力，也代表美國政府各層級都很重視與台灣合作。
+
+至於 executive order，Anthropic 長期支持立法。我們認為，了解誰在開發能力、模型能力到什麼程度，是理解與控制這項強大技術的第一步。沒有透明度，就可能出現 capable of biological weapon uplift 的模型被 open source，這不應該發生。如果 executive order 是走向更好 AI transparency legislation 的第一步，我們非常支持。不過目前文字還不完整，很多關鍵領域仍有不確定與模糊，我們會持續與政府合作改善。
+
+何伊莎貝爾：數發部負責台灣 AI risk assessment framework，我們很樂意與你們 pro-regulation 的觀點合作。最後一題：誰會贏 AI race？中國或美國，各自的優勢與劣勢是什麼？
+
+Ben：我認為中國不能贏這場競賽非常重要。台灣持續受到中國及其盟友的 cyber attack，也有很多人權與自由受到侵害的例子。如果中國贏，對世界會很糟。即使它只是繼續顯著進步，也會是問題。因為即使西方或民主國家先達到 super intelligence，時鐘也不會停，其他國家仍會繼續進步。因此台灣公司協助執行的 export controls 非常關鍵，可以確保威權政體不會持續取得進展。未來還需要繼續加強。
+
+至於是 Anthropic 贏，或其他公司贏，我沒有強烈意見。Anthropic 一直試著利用自己的領先地位建立安全先例。當我們有領先時，會持續推動安全與責任。其他公司可能超越我們，我們也可能再超越他們，最有 compute resources 的公司會輪流站上 frontier。但只要我們有領先，就會持續推 AI safety。
+
+何伊莎貝爾：接著選 Slido 上票數最高的問題。Andy 問：在能力加速這麼快的情況下，公司應該刻意不要建什麼？因為模型可能一年內就把它吸收掉。那什麼仍值得長期投入？
+
+Ben：很難說什麼不該建，但我思考該建什麼的方式，是提前預判模型能力。我們做 Claude Code 時就是這樣想：即使現在不是 100% 有效，只要它有 20% 能力，且那件事對使用者很有價值，等產品真正推出並開始成長時，模型能力就可能已經進步到真的可用。所以重點是找出「現在已經有一點 signs of life，而且對人有價值」的方向，再用 human-in-the-loop 或其他 scaffolding 做成可用產品體驗。這是我們內部常用的 heuristic。
+
+另一點是安全。用模型做不安全的事很容易。比如我們的 Chrome extension 不允許你在 Claude 控制電腦時使用 banking websites，這是刻意的安全決策，避免使用者有糟糕體驗。各位在建工具時，也應該思考可能的 downside，以及可以怎麼降低風險。
+
+現場提問：企業方案是否提供 API keys？我們想用 LiteLLM 之類的 proxy 監控與控制 enterprise usage。
+
+Ben：很多 enterprise partners 都用 LiteLLM proxy their usage。我們看到越來越多企業轉向 pay-as-you-go usage，API keys 是常見方式。我們也往 workload identity federation 前進，也就是不使用實際 API key，而是 piggyback 在 cluster 既有 identity systems 上。這對避免 secrets 外洩非常有幫助，否則外洩可能造成很大成本。我們的 applied AI team 與 support team 都很樂意協助企業實作這些系統。
+
+現場提問：MCP tools 現在散落在 NPM 等地方，enterprise clients 因安全疑慮而猶豫。Anthropic 會推出官方 audited MCP registry 嗎？SaaS providers 需要 enterprise certified page 建立 downstream trust。
+
+Ben：我們確實有 official registry，至少最近在 MCP apps 方面有。更廣泛的 MCP 也有方式可以註冊進入 Claude 預設使用的 registry。我們也允許公司使用自己的 custom registries。企業如果想控制開發者可以用哪些 extensions，是可以做到的。我們也在思考更多讓這件事更容易的方式，也歡迎大家給回饋。
+
+現場提問：Anthropic 內部如何評估 agent assistant 是否可信任到可以部署？有具體 criteria 或 benchmarks 嗎？
+
+Ben：這非常困難。Evaluation 是今天最難的問題之一。內部我們有很多 benchmarks，但也會讓 Anthropic staff 在發布前使用模型並回報問題。外部則依賴 UK AI Safety Institute、US AISI、Hayes Labs 等第三方組織，協助我們在發布前理解模型能力。安全方面，我們在 responsible scaling policy 有完整說明，大家可以去看。
+
+現場提問：台灣金融機構在 AI 導入時受到資安與個資保護規範限制。其他國家怎麼處理？對台灣有什麼建議？
+
+Ben：常見規範之一是資料必須留在國內。這就是我前面提到 cross-region inference 的地方，我們與 Amazon、Google、Azure 等 hyperscaler partners 都有相關系統。台灣很快也會有更多 capacity 上線。在 capacity 還沒在台灣時，可以做一些設計：LLM inference request 可能送到海外，但回來的資料只留在台灣土地上。Data at rest in country 也能幫助合規。最後，我們的模型也很擅長識別 personally identifiable information，所以如果能在送出 request 前先清除個資，同時仍保留推論價值，這通常也是可行方案。
+
+何伊莎貝爾：問一個台灣語言問題。你會說台語嗎？
+
+Ben：我不會。
+
+何伊莎貝爾：但 Claude 可以吧？你確定嗎？我可以給你台語語料。台灣的台語、客語與原住民族語等 underrepresented languages，AI 能力其實是文化主權問題。Anthropic 如何改善語言代表性，同時確保社群對自己的語言資料與文化知識保有 meaningful control？
+
+Ben：台灣相對富裕，但全球南方有很多語言甚至沒有書寫系統。對這些國家而言，資料收集非常重要。無論是我們或其他 frontier models，都可以成為文化保存與代表性的載體。如果沒有收集，資料可能永遠消失。所以如果政府或文化團體能合作整理資料，我們很樂意 ingest。台灣其實已有很多文化材料在公開網路上，你們前面也看到我們很徹底地 crawl。如果大家有低資源語言或文化特定資料，把它放到網路上，是讓我們最快取得的方式。
+
+何伊莎貝爾：我也要強調 Claude web crawler 是好機器人，會遵守你們在 constitution 寫的原則，不是到處搶資料。
+
+Ben：是的，我們遵守 robots.txt 與一般網路規範。如果你不希望我們 crawl，我們不會 crawl。如果你希望我們 crawl，也可以告訴我們。
+
+現場提問：中國使用者常透過 transfer stations 繞過限制。這是大問題還是被誇大？你們如何限制非中國 API customers 被轉用？
+
+Ben：Transfer stations 是很大的問題。我們正在努力打擊 API 的非法使用。這些非法使用中有很多 abuse。越能找到並停止，對世界越好。這也是 PLA 取得我們模型、參與 GTG-1002 的方式之一，我們幾個月前發過 blog post。因此關閉這些 transfer stations 對我們與世界都非常重要。若台灣能協助發現與修復問題，會非常重要。
+
+何伊莎貝爾：最後，你可以自己選一個問題回答。你想回答什麼？
+
+Ben：我想談 AI safety 是什麼。大家對 AGI 與 AI safety 有很多不同定義。在 Anthropic，我們談 safety 時，有短期安全，例如 AI 是否公平、有沒有偏見；也有長期安全，也就是 AI 是否可能造成 extinction-level events。若你沒有深入想過，這聽起來可能很誇張。但 Anthropic 從公司成立前就在思考這些。我個人 2017 年開始做 AI，這個世界相當令人害怕。
+
+當任何個人能取得 super intelligent model，能量會非常可怕。今天美國有些基因序列供應商已能合成 Ebola virus。有 biosecurity firm 做過測試，用 Gmail 地址與住家地址，要求合成 Ebola genome 的大部分片段，供應商幾乎沒有多問就寄出。這是今天，模型還沒有未來那麼強。如果未來有人只是因為 mental health trouble、或某天被惹怒、或沒有買到想喝的奶茶口味，就能合成新 pandemic，那會是非常糟糕的世界。
+
+所以 Anthropic 一直在想，當技術能力越來越強時，如何確保 misuse potential 不會跟著暴增？其他沒有台灣與美國價值的國家，也必須負責任地對待這種強大技術。如果這是你第一次聽到 biological extinction risk scenarios，我鼓勵大家認真了解。這可能是即將改變社會的最重要議題之一。我們非常需要大家協助。
+
+何伊莎貝爾：聽完這場 fireside chat，我終於理解為什麼你過去五個月都願意跟我開線上會議。謝謝你來台灣，也希望下次你能待久一點。請大家再給 Ben 一輪掌聲。
+
+主持人：剛才我們聽到 Anthropic 未來計畫與當前關注議題。接下來進入 AI in action。第一位 demo showcase presenter 是高見龍先生。他是台灣軟體開發者、教育者與社群組織者，也是五倍學院創辦人，以及 WebConf Taiwan 創辦人。今天他會用中文簡報，螢幕上會有英文即時翻譯。請大家歡迎高見龍先生。
+
+高見龍：大家好，我是高見龍。我目前在五倍學院工作，下週開始會多一個角色：Anthropic Community Leader Taipei。我寫程式大概 30 年，教學 17 年，也寫過幾本書，也許在座有人買過。如果想知道更多，可以到我的網站看。
+
+今天主題是：為什麼我要用 Claude Code 再做一個售票系統？台灣其實已經有不錯的售票系統，但我辦研討會時需要很多客製化。工程師有一個糟糕個性，就是一言不合就自己做，所以我就自己做了一套。我想，如果這能解決我的問題，也可能幫到其他活動主辦者。
+
+當時 Dario 說，三到六個月後大概 90% 的程式會由 AI 撰寫。我身為工程師第一反應是：不對，不可能。但我決定試試看。我用 Claude Code，在下班後與週末花了三個月，把東西做出來。身為老工程師，我看到成果也很驚訝。大約三個月，我用 Ruby on Rails 做了十七、十八萬行程式碼。Test case 約八千多個。現在程式碼已經超過三十萬行，而且還在增加。
+
+這套系統叫 EasyFunnel。它不只是一個網站，真的有上線。會員大約一千八百多人，成交訂單一千五百多筆，營收四百多萬。雖然不是非常大，但至少不是 vibe coding 玩具。功能包含註冊、報名、售票、金流、印票，後來我發現它不只可以賣票，幾乎什麼都能賣，甚至可以賣電子書、處理物流。我原本只是想喝一杯牛奶，最後租了一整座牧場。
+
+我們去年 WebConf 活動大約七百人，需要驗票、拿識別證、拿小物。工作人員拿手機驗票，整個流程一個人大約 5.5 秒，對我來說已經滿意。尖峰時段十分鐘可以處理一百多人。
+
+驗票有很多麻煩情境，例如網路慢、地下室沒有網路怎麼辦？所以我做了離線系統。我示範一下。這是後台與驗票系統。左邊 Chrome、右邊 Safari，是不同瀏覽器。右邊簽到後，左邊也會同步；左邊簽到後，右邊也同步。因為現場有一整排驗票台，我希望一個人驗完，旁邊也立刻知道。
+
+還有一些提醒功能。比如這位 attendee 有特殊狀態，系統會跳出提醒，實際上可以用來提醒工作人員拿 VIP 票、便當或其他物品。現在我切成離線模式，即使網路斷掉，仍然可以簽到。這些都是我跟 Claude Code 討論後做出來的。
+
+我還想讓驗票更快。台灣人身上有什麼數位資料，隨時可以拿出來，而且跟他要不會覺得奇怪？載具。如果買票時登錄載具，現場出示載具也可以驗票。另外，台灣人被訓練到很熟悉手機末三碼。現場找不到票、找不到 email 很痛苦，所以可以報手機末三碼，工作人員就能快速確認。為了儀式感，我甚至做了 BPP，但前一天晚上出問題，所以沒有上線。
+
+今年 2026 的 WebConf 仍會舉辦，時間是 12 月 11 日，歡迎大家參加。因為 EasyFunnel 已經不是玩具，所以我們也申請了商標，早上收到 email，看起來已經通過。
+
+身為工程師，我知道 Claude Code 很強，但我想知道怎麼讓自己寫 code 更快、更穩、品質更好，最好我只要出一張嘴就好。最近大家常討論 harness engineering。我不想只談理論，所以自己做了一套 harness，從 SDD，也就是 spec-driven development 開始。我做了一個 spec 工具叫 Spectra。
+
+Spectra 會把你接下來要做什麼、why、design、test 都整理出來，然後交給 AI：交給你了。它是一個 SDD 工具。後端用 Rust，前端用 Svelte，花了大約兩個月，程式碼約十二萬行。因為我對 Rust 沒有像 Ruby 那麼熟，所以很怕出問題，test case 寫了不少。這個工具也 compatible with OpenSpec，所以可以當 OpenSpec viewer 使用。Spectra 做到大概三分之一後，後半段開發其實又用 Spectra 自己來做，也就是用 SDD 做 SDD 工具。
+
+我也喜歡 CLI 與 terminal，所以又做了自己的 terminal workflow。我不喜歡畫面切得太複雜，最多接受兩個畫面。我希望從 terminal 開始，旁邊有 editor 或必要資訊，讓 AI 照規格做事。對我來說，Claude Code 的重點不是把工程師取代，而是讓工程師重新設計自己的工作流：規格、測試、驗證、工具與節奏。
+
+主持人：接下來進入 AI 與 cybersecurity panel。我們想討論 AI-native threats、台灣面臨的攻擊、以及民主社會如何建立韌性。
+
+主持人：台灣在 AI cybersecurity 上，哪裡最需要優先處理？哪些系統或產業最脆弱？
+
+與談人：台灣是很多國家級攻擊的第一線。因為台灣的地緣位置，我們非常常看到來自中國或相關行為者的攻擊。在 AI 時代，攻擊的規模與速度會是過去沒看過的。因此 critical infrastructure 是第一優先，像是電力、電網、醫院與中央政府系統，都必須優先保護。
+
+另一個重點是供應鏈。大家常想到 TSMC、Foxconn 這些大公司，它們有資安團隊與資安解決方案。但供應鏈裡有很多中小企業，例如 PCB、材料、零組件公司，雖然規模小，卻生產關鍵元件。它們沒有足夠預算或團隊做完整資安，反而可能成為破口。政府正在思考如何把資安公司與 SME 串起來，找出可負擔、可部署的方案。
+
+與談人：台灣是測試 AI-driven cybersecurity solutions 的好地方，因為我們真的面對最真實的攻擊。現在 AI offensive capabilities 已經存在，而且速度快到人類無法用傳統方式追上。我們必須從產品設計早期就把 AI 防禦放進去。如果只等產品做完再補安全，就太慢了。
+
+與談人：我認為台灣有機會把這些壓力轉化成可分享給世界的模式。台灣有不錯的 digitization 與 AI awareness 基礎，如果能建立一套讓更多人理解 AI 資安、參與防禦的方式，就能分享給其他民主國家。
+
+與談人：台灣在 AI ecosystem 中的角色被低估了。沒有台灣供應鏈，就沒有全球 AI development。若民主國家要在 AI competition 中勝出，尤其面對中國，就必須一起確保供應鏈安全。第二，台灣常常第一個看見 adversarial attacks，這些資訊對其他民主國家非常有價值。第三，如果我們合作，就能示範什麼是 strong defense、resilience 與 secure supply chain。
+
+主持人：有些人說 AI 最終會有利於 hacker，有些人說會有利於 defender。你們怎麼看？
+
+與談人：AI 本身沒有意圖，不會偏向攻擊或防禦。但攻擊者通常更有意圖，而防禦者常常不是每個人都在想防禦。在台灣，我們有高品質資安專家，但人數很少。一般人不一定把自己視為防禦的一部分。所以誰有意圖、誰準備好使用 AI，誰就會被 AI 放大。
+
+與談人：現階段我覺得可能比較有利於攻擊者，因為攻擊者可以快速嘗試、快速生成。但如果我們把 AI 放進產品早期設計週期，讓防禦能在一開始就介入，就有機會翻轉局面。
+
+與談人：我們認為這取決於我們怎麼做。今天有幾十年的 vulnerability debt，很多漏洞在 open source software 裡存在三十年甚至更久，安全研究者也沒有找到。AI 有機會幫我們發現這些漏洞，強化全球使用者最多的 software supply chain 與 firmware supply chain。它不會讓我們無敵，未來仍會有新模型、設定錯誤與其他攻擊路徑。但相對於今天 status quo 偏向 offense，AI 也可能讓我們有機會翻盤。
+
+主持人：在 AI-native threat environment 中，哪些 cyber defense 假設不再成立？
+
+與談人：速度、自主性與模型能力都會改變現況。以前修漏洞可能有一週，現在可能只剩一天，甚至更短。傳統 SOP 必須重寫。
+
+主持人：如果台灣未來兩年只能優先推一個 major initiative，應該是什麼？
+
+與談人：從教育角度，我會推 AI era cybersecurity knowledge for everyone。不只是技術人員，一般人也要有資安 mindset。AI 讓 attack surface 變更廣，人類會成為最弱點。硬體製造與 protocol 可以控得很緊，但到了軟體與應用層，人無所不在，整個系統變得 porous。因此需要容易理解、容易消化的全民教育。
+
+與談人：我會優先保護供應鏈 SME。critical infrastructure 很重要，但供應鏈裡的小公司同樣是弱點。政府應該把資安方案推到中小企業規模，尤其如果未來幾個月看到新一波針對供應鏈的攻擊，我們必須準備好。
+
+與談人：我認為最重要的是 AI-ready。Mythos 今天是一個模型，明天競爭者會有另一個模型，後天又會有新模型。問題是，你的組織在人員、文化與 practice 上是否準備好使用這些能力。很多公司即使今天得到 frontier capabilities，也無法真正使用，這是最大挑戰。
+
+主持人：高階 AI cyber capabilities 應該被視為 strategic infrastructure，還是應該廣泛開放以最大化 innovation？如何平衡 security、openness 與 democratic values？
+
+與談人：這是 Anthropic mission 非常重視的問題。第一，我們要透明告訴 public 能力即將到來。今天談 cyber，接下來 advanced bio capabilities 也會到來，未來還會有模型能改善自身，這對 control 問題有重大影響。第二，對模型做 safeguards。像 Mythos 這類沒有 heavily safeguarded 的模型，必須確保能力不落入錯誤的人手中，包括 cyber threats 與 insider risk。如果發生，台灣可能是最早受害者之一。第三，我們希望把有益能力釋出，同時降低風險，例如讓 codebase scanning 或 pen testing 這類防禦能力可用，但不讓危險能力失控外流。
+
+與談人：從政府角度，這很難。美國白皮書或行政命令有 voluntary framework，要求 frontier AI company 與政府合作。Anthropic 發布 Mythos 的方式是一個很好的 starting point，也為其他擁有這種能力的公司建立標準。台灣一方面感謝這種方式，避免敵人取得高階能力；另一方面也希望能取得防禦台灣所需的能力。所以答案不是完全開放或完全封閉，而是目前這種受控發布模式很值得參考。
+
+與談人：我們不應為了 performance 或技術優勢犧牲 security 或 safety。但如果能把 safety awareness 帶給每個人，就能有更強防禦、更廣 coverage、更快 response。台灣目前的取向與美國政府類似，讓 stakeholder 定義自己的風險與處理方式，提供 progress 與 safety 之間的合理 trade-off。
+
+與談人：如果我們沒有把平衡做好、沒有足夠重視安全，一旦發生 catastrophic incident，在民主社會裡大家很可能會說這失控了，要求停止一切。那對 innovation 的後果反而非常負面。
+
+主持人：如果要重新設計 AI era 的 cybersecurity education，哪些技能會變得更重要？
+
+與談人：AI 讓安全不只在 software、system 或 network layer，而是一路從 data 開始。因此教育要涵蓋更廣的系統。AI ecosystem 中會有多方 stakeholder 互動與協調；攻擊者可能用 AI 以 lightning speed 協調攻擊，若防禦者仍用傳統方式，就會輸。必須把 AI 部署到協調與 response system 中，並提前規劃自動化。
+
+與談人：五年太遠，五個月可能比較實際。最有效的 cybersecurity professionals 需要能熟練使用這些工具，不管是 Claude Code、Codex 或其他工具。在資安教育或一般教育中，應把 cybersecurity competitions 變成課程的一部分，讓人進入工作前就自然熟悉這些工具。
+
+主持人：政府如何吸引與留住 AI 與 cyber talent？
+
+與談人：薪資上政府永遠無法競爭。但在台灣，政府與公共部門看到的是其他地方不一定看得到的 national sponsor attacks。我們可以吸引人才來政府工作，因為這裡是真實戰場。工作三到五年後，他們會變成很強的數位任務人才，再去產業界。台灣有全社會韌性政策，會建立公私部門 joint defense system。政府不一定要永遠留住人才，而是培養人才，必要時一起合作。
+
+與談人：我在美國國安會建立科技與國安團隊時，曾擔心永遠找不到半導體、量子、分子生物學專家，因為政府付不起錢。後來發現我們錯了。很多人不在意錢，他們在意是否能對政策有影響，還是會被 bureaucracy 壓垮。若知道自己有 impact，就很願意來。有些在美國 AI Safety Institute 工作的人，放棄數百萬美元薪資，只為政府做 AI safety。我相信在台灣這種使命感很強的民主社會也一樣。重點是政府要創造讓人願意服務的環境。
+
+主持人：如果用一句話說，民主國家為了在 frontier AI 邊緣保持優勢，最重要的事是什麼？
+
+與談人：理念相近的國家需要深入且一致地合作，建立彼此信任。台灣的科技供應鏈與政策位置很重要，確保 supply chain cybersecurity 不只是台灣任務，也是全球任務。
+
+與談人：我認為是緊緊守住民主價值。AI 將觸及政治、社會與文化的每個表面，也可能誘惑某些行為者集中權力與財富。問題是我們是否有共同承諾，確保人類尊嚴，讓人類透過民主程序控制技術。
+
+何伊莎貝爾：AI 不只是技術，也是夥伴之間的信任挑戰。今天討論很豐富，也有一個共識：民主國家需要強韌夥伴關係，共同建立更好的 cybersecurity。謝謝各位與談人，也謝謝大家參與。
+
+主持人：接下來邀請第二位 demo showcase presenter，黃亮群先生。他是 Twinkle AI 社群創辦人，致力於建立 open source traditional Chinese datasets，也推動下一代繁體中文語言模型。最近他推出 Twinkle Hub，台灣第一個 Taiwan MCP platform，整合超過五萬個台灣政府 open data datasets。請大家歡迎黃亮群。
+
+黃亮群：等一下我想讓大家知道，台灣人如何有創意地使用 Claude Code，build 出非常酷的東西。我是 Twinkle AI 社群創辦人，旁邊這隻小石虎是我們吉祥物，代表台灣文化與生態中很需要被保護的部分。我平常經營 Twinkle AI 社群，同時在 ADMIC 擔任 AI 工程總監。我的工作大概三件事：大型語言模型訓練、整理 open data、經營社群。我相信開放與開源能讓台灣 AI 發展更進一步。
+
+今天先回顧一個鐵三角。過去我們怎麼打造 AI 與 app？從底層開始累積 data，打造 model，再做成 app。在 deep learning 年代，我們很努力做資料收集與模型訓練，這件事非常困難，大多只有 RD 或 developer 能做，所以科技發展速度沒有現在這麼快。
+
+Claude Code 出現後，時代大幅躍進。現在你只要用自然語言，就能做出 app。在 Threads 上可以看到很多非 RD 夥伴也做出很酷的東西。Claude Code 省下 model 那一層，讓你快速打造 app。可是問題也出現了：你用 Claude Code，我也用 Claude Code，如果我們有同樣想法，就很容易撞牆。每個人都想打造 agent、打造 app，但每個人也希望做出獨立產品，甚至創業。
+
+我想到早年的護城河：data。過去每個人有自己的 data，透過獨有 data 打造 app 與產品。那在 Claude Code 很強的情況下，我們是不是可以用自己的 data 加 Claude Code，重新建立強大的護城河？
+
+我開始想，如果有人幫我準備好台灣在地 data，包含政府、日常生活與各種可使用資料；而且已經做成 MCP-ready，可以直接接 Claude Code；還必須合規、可授權、可使用，不會讓 app 出問題；最後還有人每天幫我 maintain，我不用做髒活，只要點一下就能用。台灣有這樣的東西嗎？
+
+Ladies and gentlemen，讓我介紹 Twinkle Hub：10 minutes from data to your agent。
+
+這是 Twinkle Hub 首頁。你只要按一下，就能快速把 MCP 裝進 Claude Desktop。我問它一個問題：某個指標與各縣市工程比例有沒有關係？它會快速查 Twinkle Hub 裡的 open data，馬上得到一個 app。即使你不是 RD，只要接上 Twinkle Hub，用自然語言就能做出東西。
+
+換句話說，Claude Code 加 Twinkle Hub，得到的是台灣在地認知的 agent。這不是只有我自己在台上吹。我們上線才第四週，很多 developer 已經做出產品。
+
+第一個案例，有人用 Twinkle Hub 做出民宿查詢。比如想去南投玩，就用政府 open data 查出哪些民宿合法，還接 Google Map，不到十分鐘就做出來。
+
+第二個案例更有趣。我們一開始沒有收全國實價登錄資料。有一次會議中，有人在廁所遇到我，問我們能不能整理全國實價登錄。我確認資料授權後整理上去，朋友半小時後就做出全國實價登錄的 AI 問答。以前全國實價登錄不能直接用 QA 方式問，現在接上 Twinkle Hub 就可以。那位朋友說，他太太做房仲，有這個工具可以瞬間做很多事。那一刻我第一次感覺，我們做的不是一個產品，而是一個開發工具。
+
+第三個案例，有人做出台中交通事故熱點分析，快速用地圖找出哪裡常發生事故。Open data 上有太多領域知識，每個人熟悉的領域不同，但 Twinkle Hub 幫你把資料整理好，你就能結合自己的專長與 Claude Code，做出自己領域的 app 與 agent，形成自己的 business model。
+
+還有人做金融與失業率之間的關聯分析，大約十到三十分鐘就用 Twinkle Hub 打出一個 app。最近也很多國考生希望能查找考試題目。我們把 open data 裡的 PDF 透過 OCR 轉成純文字，放進 Twinkle Hub。現在可以用語意搜尋查歷年題目，例如搜尋三相電路，就能找到相關考題。你還需不需要上補習班？看起來可能不用。
+
+我也看後台統計，發現大家很常查房價、門牌、政府採購、台灣小工具、空氣與環境品質、公司情報，以及考試題目。這些是台灣人非常常使用的資料方向。
+
+我們不只是做 MCP，還把 skills 也整合進去。因為有些人不是用 Claude，而是用其他 AI agent。Claude 很聰明，看到 MCP 大概知道怎麼用，但其他 agent 可能要花很多 token 才找到答案。我們做了官方 Twinkle Code Skills，可以減少 35% 以上 token 消耗、速度快 3 倍，並提高找到正確資料的機率。Twinkle Skills 會輔助 Twinkle Hub，讓你更快在 Taiwan MCP 裡找到需要的 data。
+
+過去你要查政府資料，可能要自己養一頭牛、養一個農場，爬資料、整理資料、查資料。今天不用了。我們把這些事情先做好，你只要用自然語言接上 MCP，就可以查整個台灣你想要的知識。
+
+Twinkle Hub 後面有五萬多個台灣 open data，也準備約七十個 Taiwan tools。為什麼需要 Taiwan tools？因為台灣有很多獨有的 PII 與資料格式，例如地區號、電話格式、身分證字號。如果你讓一般 LLM 自己處理，可能會有很多問題，也不準。我們把這些 tools 做好，讓 agent 可以直接使用，節省 token 並提高準確率。
+
+我們怎麼能在十天內做出 Twinkle Hub？後面有多少人？答案是一個人，就是我。因為 Claude Code 現在太強了。一個人花十天，把這個產品做出來。當然，這也結合了我過去整理資料集的經驗、政府長年累積的 open data，以及 community 給的 feedback。過程中我幾乎沒有真正碰到裡面的程式，主要用 AI 反覆試貼、修改與打造。
+
+上線第四週，已經有三千多人註冊，每天大約有五百 active users。這真的很不可思議，因為它已經變成一個產品。最後我想說，Twinkle Hub 不是要做 agent。我們要做的是所有夥伴的 continuation。Claude Code 幫你做好 agent，Twinkle Hub 幫你的 agent 更認識台灣，做出更符合台灣商業需求與在地情境的 agent。謝謝大家。
